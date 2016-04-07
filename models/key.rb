@@ -48,12 +48,12 @@ class Key
   end
 
   def self.find(find_id)
-    config_file = File.read(STORE_DIR + find_id + '.txt')
-    Configuration.new JSON.parse(config_file)
+    key_file = File.read(STORE_DIR + find_id + '.txt')
+    Key.new JSON.parse(key_file)
   end
 
   def self.setup
-    Dir.mkdir(Configuration::STORE_DIR) unless Dir.exist? STORE_DIR
+    Dir.mkdir(Key::STORE_DIR) unless Dir.exist? STORE_DIR
   end
 
 end
