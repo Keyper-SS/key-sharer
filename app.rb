@@ -31,7 +31,6 @@ class ShareKeysAPI < Sinatra::Base
     end
   end
 
-  # - POST `/api/v1/keys/?`:
   post '/api/v1/keys/?' do
     content_type 'application/json'
 
