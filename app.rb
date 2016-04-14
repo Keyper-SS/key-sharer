@@ -53,7 +53,8 @@ class ShareKeysAPI < Sinatra::Base
   get '/api/v1/accounts/:account_username/keys/?' do
     content_type 'application/json'
     account_username = params[:account_username]
-    JSON.pretty_generate(data: Secret.all)
+    account = Account.where(username: account_username).first
+    JSON.pretty_generate(data: accounts, relationships: { owned: [] , shared: [] })
   end
 
   get '/api/v1/accounts/:account_username/keys/:key_id' do
