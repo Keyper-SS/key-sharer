@@ -108,4 +108,20 @@ class ShareKeysAPI < Sinatra::Base
     status 201
     headers('Location' => new_location)
   end
+
+  post '/api/v1/accounts/:account_username/keys/:key_id/share' do
+    begin
+      new_data = JSON.parse(request.body.read)
+      saved_secret = Sharing.create(new_data)
+    rescue => e
+      logger.info "FAILED to share key: #{e.inspect}"
+      halt 400
+    end
+
+    new_location = URI.join("/api/v1/accounts/:account_username/keys/")
+                      .to_s
+
+    status 201
+    headers('Location' => new_location)
+  end
 end
