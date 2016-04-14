@@ -78,7 +78,6 @@ class ShareKeysAPI < Sinatra::Base
     end
     
     if !secret
-      puts 'checking received'
       secrets_received = account ? Account[account.id].secrets_received : []
       secrets_received.to_a.each do |key| 
         if Integer(key.id) == Integer(params[:key_id])
@@ -94,6 +93,19 @@ class ShareKeysAPI < Sinatra::Base
     end
   end
 
-  post '/api/v1/keys/?' do
+  post '/api/v1/accounts/:account_username/key/?' do
+    begin
+      new_data = JSON.parse(request.body.read)
+      saved_secret = Secret.create(new_data)
+    rescue => e
+      logger.info "FAILED to create new secret: #{e.inspect}"
+      halt 400
+    end
+
+    new_location = URI.join(@request_url.to_s + '/', saved_secret.username.to_s)
+                      .to_s
+
+    status 201
+    headers('Location' => new_location)
   end
 end
