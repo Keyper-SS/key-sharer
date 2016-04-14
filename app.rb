@@ -50,12 +50,62 @@ class ShareKeysAPI < Sinatra::Base
     headers('Location' => new_location)
   end
 
-  get '/api/v1/keys/?' do
+  get '/api/v1/accounts/:account_username/keys/?' do
+    content_type 'application/json'
+    account_username = params[:account_username]
+    account = Account.where(username: account_username).first
+    secrets_owned = account ? Account[account.id].secrets : []
+    secrets_shared = account ? Account[account.id].secrets_shared : []
+    secrets_received = account ? Account[account.id].secrets_received : []
+
+    if account
+      JSON.pretty_generate(data: account, keys: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+    else
+      halt 404, "ACCOUNT NOT FOUND: #{account_username}"
+    end
   end
 
-  get '/api/v1/keys/:key_id.json' do
+  get '/api/v1/accounts/:account_username/keys/:key_id' do
+    content_type 'application/json'
+    secret = nil
+    account_username = params[:account_username]
+    account = Account.where(username: account_username).first
+    secrets_owned = account ? Account[account.id].secrets : []
+    secrets_owned.each do |key| 
+      if Integer(key.id) == Integer(params[:key_id])
+        secret = key
+      end
+    end
+    
+    if !secret
+      secrets_received = account ? Account[account.id].secrets_received : []
+      secrets_received.to_a.each do |key| 
+        if Integer(key.id) == Integer(params[:key_id])
+          secret = key
+        end
+      end
+    end
+  
+    if secret
+      JSON.pretty_generate(data: secret)
+    else
+      halt 404, "SECRET NOT FOUND OR YOU ARE NOT AUTHORIZED TO READ: #{account_username}"
+    end
   end
 
-  post '/api/v1/keys/?' do
+  post '/api/v1/accounts/:account_username/key/?' do
+    begin
+      new_data = JSON.parse(request.body.read)
+      saved_secret = Secret.create(new_data)
+    rescue => e
+      logger.info "FAILED to create new secret: #{e.inspect}"
+      halt 400
+    end
+
+    new_location = URI.join(@request_url.to_s + '/', saved_secret.id.to_s)
+                      .to_s
+
+    status 201
+    headers('Location' => new_location)
   end
 end
