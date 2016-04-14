@@ -3,7 +3,7 @@ require 'sequel'
 
 # Holds a Account information
 class Account < Sequel::Model
-  one_to_many :key
+  one_to_many :secrets
 
   def to_json(options = {})
     JSON({  type: 'account',

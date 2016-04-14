@@ -2,7 +2,7 @@ require 'sequel'
 
 Sequel.migration do
   change do
-    create_table(:keys) do
+    create_table(:secrets) do
       primary_key :id
       foreign_key :account_id
       String :title, null: false

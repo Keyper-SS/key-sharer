@@ -1,2 +1,2 @@
 require_relative './account'
-require_relative './key'
+require_relative './secret'

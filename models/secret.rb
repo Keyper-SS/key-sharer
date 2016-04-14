@@ -3,11 +3,11 @@ require 'base64'
 require 'sequel'
 
 # Holds the key information for each account
-class Key < Sequel::Model
-  many_to_one :account
+class Secret < Sequel::Model
+  many_to_one :accounts
 
   def to_json(options = {})
-    JSON({  type: 'key',
+    JSON({  type: 'secret',
             id: id,
             data: {
               title: title,
