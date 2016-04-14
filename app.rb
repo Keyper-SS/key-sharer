@@ -67,17 +67,30 @@ class ShareKeysAPI < Sinatra::Base
 
   get '/api/v1/accounts/:account_username/keys/:key_id' do
     content_type 'application/json'
+    secret = nil
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
     secrets_owned = account ? Account[account.id].secrets : []
+    secrets_owned.each do |key| 
+      if Integer(key.id) == Integer(params[:key_id])
+        secret = key
+      end
+    end
     
-    secrets_shared = account ? Account[account.id].secrets_shared : []
-    secrets_received = account ? Account[account.id].secrets_received : []
-
-    if account
-      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+    if !secret
+      puts 'checking received'
+      secrets_received = account ? Account[account.id].secrets_received : []
+      secrets_received.to_a.each do |key| 
+        if Integer(key.id) == Integer(params[:key_id])
+          secret = key
+        end
+      end
+    end
+  
+    if secret
+      JSON.pretty_generate(data: secret)
     else
-      halt 404, "ACCOUNT NOT FOUND: #{account_username}"
+      halt 404, "SECRET NOT FOUND OR YOU ARE NOT AUTHORIZED TO READ: #{account_username}"
     end
   end
 
