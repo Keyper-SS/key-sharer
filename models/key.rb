@@ -19,9 +19,6 @@ class Key < Sequel::Model
          options)
   end
 
-  def document
-    Base64.strict_decode64 base64_document
-  end
 end
 
 # TODO: implement a more complex primary key?
