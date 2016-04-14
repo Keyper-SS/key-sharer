@@ -7,8 +7,8 @@ Sequel.migration do
       foreign_key :account_id
       String :title, null: false
       String :description, null: true
-      String :key, null: false
-      String :value, null: true
+      String :share_account, null: false
+      String :share_password, null: true
     end
   end
 end
