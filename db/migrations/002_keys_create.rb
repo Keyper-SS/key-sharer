@@ -8,9 +8,7 @@ Sequel.migration do
       String :title, null: false
       String :description, null: true
       String :key, null: false
-      String :value, null: false
-
-      unique [:key]
+      String :value, null: true
     end
   end
 end
