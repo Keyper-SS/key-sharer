@@ -10,7 +10,6 @@ class Key < Sequel::Model
     JSON({  type: 'key',
             id: id,
             data: {
-              owner: owner,
               title: title,
               description: description,
               key: key,
