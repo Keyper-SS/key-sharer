@@ -25,10 +25,10 @@ class ShareKeysAPI < Sinatra::Base
 
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
-    keys = account ? Account[account.id].keys : []
+    secrets = account ? Account[account.id].secrets : []
 
     if account
-      JSON.pretty_generate(data: account, relationships: keys)
+      JSON.pretty_generate(data: account, relationships: secrets)
     else
       halt 404, "PROJECT NOT FOUND: #{account_username}"
     end
