@@ -50,13 +50,13 @@ class ShareKeysAPI < Sinatra::Base
     headers('Location' => new_location)
   end
 
-  get '/api/v1/keys/?' do
+  get '/api/v1/accounts/:account_username/keys/?' do
     content_type 'application/json'
-
+    account_username = params[:account_username]
     JSON.pretty_generate(data: Secret.all)
   end
 
-  get '/api/v1/keys/:key_id.json' do
+  get '/api/v1/accounts/:account_username/keys/:key_id' do
     content_type 'application/json'
 
     secret = Secret.where(is: params[:key_id]).first
