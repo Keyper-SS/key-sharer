@@ -4,6 +4,7 @@ require 'sequel'
 # Holds a Account information
 class Account < Sequel::Model
   one_to_many :secrets
+  has_many :keys, :through => :sharings
 
   def to_json(options = {})
     JSON({  type: 'account',
