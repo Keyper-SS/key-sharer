@@ -51,9 +51,21 @@ class ShareKeysAPI < Sinatra::Base
   end
 
   get '/api/v1/keys/?' do
+    content_type 'application/json'
+
+    JSON.pretty_generate(data: Secret.all)
   end
 
   get '/api/v1/keys/:key_id.json' do
+    content_type 'application/json'
+
+    secret = Secret.where(is: params[:key_id]).first
+
+    if secret
+      JSON.pretty_generate(data: secret)
+    else
+      halt 404, "SECRET #{params[:key_id]} NOT FOUND"
+    end
   end
 
   post '/api/v1/keys/?' do

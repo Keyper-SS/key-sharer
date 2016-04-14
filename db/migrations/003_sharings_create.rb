@@ -8,7 +8,7 @@ Sequel.migration do
       foreign_key :received_by, :accounts
       Integer :key_id
 
-      unique[:shared_by,:received_by]
+      unique [:shared_by, :received_by]
     end
   end
 end
