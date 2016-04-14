@@ -58,18 +58,26 @@ class ShareKeysAPI < Sinatra::Base
     secrets_shared = account ? Account[account.id].secrets_shared : []
     secrets_received = account ? Account[account.id].secrets_received : []
 
-    JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+    if account
+      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+    else
+      halt 404, "ACCOUNT NOT FOUND: #{account_username}"
+    end
   end
 
   get '/api/v1/accounts/:account_username/keys/:key_id' do
     content_type 'application/json'
+    account_username = params[:account_username]
+    account = Account.where(username: account_username).first
+    secrets_owned = account ? Account[account.id].secrets : []
+    
+    secrets_shared = account ? Account[account.id].secrets_shared : []
+    secrets_received = account ? Account[account.id].secrets_received : []
 
-    secret = Secret.where(is: params[:key_id]).first
-
-    if secret
-      JSON.pretty_generate(data: secret)
+    if account
+      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
     else
-      halt 404, "SECRET #{params[:key_id]} NOT FOUND"
+      halt 404, "ACCOUNT NOT FOUND: #{account_username}"
     end
   end
 
