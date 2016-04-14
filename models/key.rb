@@ -12,8 +12,8 @@ class Key < Sequel::Model
             data: {
               title: title,
               description: description,
-              key: key,
-              value: value
+              share_account: share_account,
+              share_password: share_password
             }
           },
          options)
