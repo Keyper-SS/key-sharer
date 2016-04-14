@@ -3,9 +3,8 @@ require 'base64'
 require 'sequel'
 
 # Holds the key information for each account
-class Secret < Sequel::Model
-  many_to_one :account
-  many_to_one :secret
+class Sharing < Sequel::Model
+  many_to_one :secrets
 
   # def to_json(options = {})
   #   JSON({  type: 'sharing',
