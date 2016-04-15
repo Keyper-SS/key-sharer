@@ -59,7 +59,7 @@ class ShareKeysAPI < Sinatra::Base
     secrets_received = account ? Account[account.id].secrets_received : []
 
     if account
-      JSON.pretty_generate(data: account, keys: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
     else
       halt 404, "ACCOUNT NOT FOUND: #{account_username}"
     end
