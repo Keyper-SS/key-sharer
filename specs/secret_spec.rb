@@ -47,7 +47,7 @@ describe 'Testing Secret resource routes' do
     end
   end
 
-  describe 'Finding existing key' do
+  describe 'Finding existing secret' do
     it 'HAPPY: should find an existing keys' do
       new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
       new_secret = (1..3).map do |i|
@@ -66,12 +66,41 @@ describe 'Testing Secret resource routes' do
       results = JSON.parse(last_response.body)
       _(results['data']['id']).must_equal new_account.id
       3.times do |i|
-        _(results['keys']['owned'][i]['id']).must_equal new_secret[i].id
+        _(results['secrets']['owned'][i]['id']).must_equal new_secret[i].id
       end
     end
 
     it 'SAD: should not find non-existent accounts' do
       get "/api/v1/accounts/#{invalid_id(Account)}/secrets"
+      _(last_response.status).must_equal 404
+    end
+  end
+
+  describe 'Finding existing secret by given id' do
+    it 'HAPPY: should find an existing keys' do
+      new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
+      new_secret = (1..3).map do |i|
+          s = {
+            title: "random_secret#{i}.rb",
+            description: "test string#{i}",
+            share_account: "asdf#{i}",
+            share_password: "1234",
+          }
+          new_account.add_secret(s)
+      end
+      3.times do |i|
+        get "/api/v1/accounts/#{new_account.username}/secrets/#{new_secret[i].id}"
+        _(last_response.status).must_equal 200
+
+        results = JSON.parse(last_response.body)
+        _(results['data']['type']).must_equal 'secret'
+        _(results['data']['id']).must_equal new_secret[i].id
+      end
+    end
+
+    it 'SAD: should not find non-existent accounts' do
+      new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
+      get "/api/v1/accounts/#{new_account.id}/secrets/#{invalid_id(Secret)}"
       _(last_response.status).must_equal 404
     end
   end
