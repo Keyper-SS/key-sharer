@@ -50,7 +50,7 @@ class ShareKeysAPI < Sinatra::Base
     headers('Location' => new_location)
   end
 
-  get '/api/v1/accounts/:account_username/keys/?' do
+  get '/api/v1/accounts/:account_username/secrets/?' do
     content_type 'application/json'
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
@@ -65,27 +65,27 @@ class ShareKeysAPI < Sinatra::Base
     end
   end
 
-  get '/api/v1/accounts/:account_username/keys/:key_id' do
+  get '/api/v1/accounts/:account_username/secrets/:secret_id' do
     content_type 'application/json'
     secret = nil
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
     secrets_owned = account ? Account[account.id].secrets : []
-    secrets_owned.each do |key| 
+    secrets_owned.each do |key|
       if Integer(key.id) == Integer(params[:key_id])
         secret = key
       end
     end
-    
+
     if !secret
       secrets_received = account ? Account[account.id].secrets_received : []
-      secrets_received.to_a.each do |key| 
+      secrets_received.to_a.each do |key|
         if Integer(key.id) == Integer(params[:key_id])
           secret = key
         end
       end
     end
-  
+
     if secret
       JSON.pretty_generate(data: secret)
     else
@@ -93,7 +93,7 @@ class ShareKeysAPI < Sinatra::Base
     end
   end
 
-  post '/api/v1/accounts/:account_username/key/?' do
+  post '/api/v1/accounts/:account_username/secrets/?' do
     begin
       new_data = JSON.parse(request.body.read)
       saved_secret = Secret.create(new_data)
