@@ -65,11 +65,12 @@ class ShareKeysAPI < Sinatra::Base
     end
   end
 
-  get '/api/v1/accounts/:account_username/secrets/:secret_id' do
+  get '/api/v1/accounts/:account_username/secrets/:secret_id/?' do
     content_type 'application/json'
     secret_find = nil
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
+
     secrets_owned = account ? Account[account.id].secrets : []
     secrets_owned.each do |secret|
       if Integer(secret.id) == Integer(params[:secret_id])
@@ -81,7 +82,7 @@ class ShareKeysAPI < Sinatra::Base
       secrets_received = account ? Account[account.id].secrets_received : []
       secrets_received.to_a.each do |secret|
         if Integer(secret.id) == Integer(params[:secret_id])
-          secret_find = key
+          secret_find = secret
         end
       end
     end
