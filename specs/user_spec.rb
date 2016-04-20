@@ -11,7 +11,7 @@ describe 'Testing Account resource routes' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
       req_body = {
         username: 'vicky',
-        password: '1234',
+        password_encrypted: '1234',
         email: 'vicky@keyper.com'
       }.to_json
       post '/api/v1/accounts/', req_body, req_header
@@ -23,7 +23,7 @@ describe 'Testing Account resource routes' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
       req_body = {
         username: 'vicky',
-        password: '1234',
+        password_encrypted: '1234',
         email: 'vicky@keyper.com'
       }.to_json
       post '/api/v1/accounts/', req_body, req_header
@@ -40,13 +40,10 @@ describe 'Testing Account resource routes' do
       new_account.password_encrypted = '1234'
       new_account.save
       new_secret = (1..3).map do |i|
-          s = {
-            title: "random_secret#{i}.rb",
-            description: "test string#{i}",
-            account_encrypted: "asdf#{i}",
-            password_encrypted: "1234",
-          }
-          new_account.add_secret(s)
+          secret = Secret.new(title: "random_secret#{i}.rb", description: "test string#{i}")
+          secret.account_encrypted = "asdf#{i}"
+          secret.password_encrypted = '1234'
+          new_account.add_secret(secret)
       end
 
       get "/api/v1/accounts/#{new_account.username}"

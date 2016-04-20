@@ -37,7 +37,10 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/accounts/?' do
     begin
       new_data = JSON.parse(request.body.read)
-      saved_account = Account.create(new_data)
+      saved_account = User.new(email: new_data["email"])
+      saved_account.username = new_data["username"]
+      saved_account.password_encrypted = new_data["password_encrypted"]
+      saved_account.save
     rescue => e
       logger.info "FAILED to create new project: #{e.inspect}"
       halt 400
