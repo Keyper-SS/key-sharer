@@ -35,13 +35,16 @@ describe 'Testing Account resource routes' do
 
   describe 'Finding existing accounts' do
     it 'HAPPY: should find an existing account' do
-      new_account = User.create(username: 'yiwei', password: '1234', email: 'yiwei@keyper.com')
+      new_account = User.new(email: 'yiwei@keyper.com')
+      new_account.username = 'yiwei'
+      new_account.password_encrypted = '1234'
+      new_account.save
       new_secret = (1..3).map do |i|
           s = {
             title: "random_secret#{i}.rb",
             description: "test string#{i}",
-            share_account: "asdf#{i}",
-            share_password: "1234",
+            account_encrypted: "asdf#{i}",
+            password_encrypted: "1234",
           }
           new_account.add_secret(s)
       end
@@ -65,9 +68,10 @@ describe 'Testing Account resource routes' do
   describe 'Getting an index of existing accounts' do
     it 'HAPPY: should find list of existing accounts' do
       (1..5).each do |i| 
-        User.create(email: "asdf#{i}@keyper.com") 
-        User.username = "asdf#{i}"
-        User.password = '1234'
+        user = User.new(email: "asdf#{i}@keyper.com") 
+        user.username = "asdf#{i}"
+        user.password_encrypted = '1234'
+        user.save
       end
       result = get '/api/v1/accounts'
       projs = JSON.parse(result.body)
