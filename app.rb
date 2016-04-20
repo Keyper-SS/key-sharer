@@ -50,7 +50,7 @@ class ShareKeysAPI < Sinatra::Base
     headers('Location' => new_location)
   end
 
-  get '/api/v1/accounts/:account_username/keys/?' do
+  get '/api/v1/accounts/:account_username/secrets/?' do
     content_type 'application/json'
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
@@ -59,41 +59,42 @@ class ShareKeysAPI < Sinatra::Base
     secrets_received = account ? Account[account.id].secrets_received : []
 
     if account
-      JSON.pretty_generate(data: account, keys: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
     else
       halt 404, "ACCOUNT NOT FOUND: #{account_username}"
     end
   end
 
-  get '/api/v1/accounts/:account_username/keys/:key_id' do
+  get '/api/v1/accounts/:account_username/secrets/:secret_id/?' do
     content_type 'application/json'
-    secret = nil
+    secret_find = nil
     account_username = params[:account_username]
     account = Account.where(username: account_username).first
+
     secrets_owned = account ? Account[account.id].secrets : []
-    secrets_owned.each do |key| 
-      if Integer(key.id) == Integer(params[:key_id])
-        secret = key
+    secrets_owned.each do |secret|
+      if Integer(secret.id) == Integer(params[:secret_id])
+        secret_find = secret
       end
     end
-    
-    if !secret
+
+    if !secret_find
       secrets_received = account ? Account[account.id].secrets_received : []
-      secrets_received.to_a.each do |key| 
-        if Integer(key.id) == Integer(params[:key_id])
-          secret = key
+      secrets_received.to_a.each do |secret|
+        if Integer(secret.id) == Integer(params[:secret_id])
+          secret_find = secret
         end
       end
     end
-  
-    if secret
-      JSON.pretty_generate(data: secret)
+
+    if secret_find
+      JSON.pretty_generate(data: secret_find)
     else
       halt 404, "SECRET NOT FOUND OR YOU ARE NOT AUTHORIZED TO READ: #{account_username}"
     end
   end
 
-  post '/api/v1/accounts/:account_username/key/?' do
+  post '/api/v1/accounts/:account_username/secrets/?' do
     begin
       new_data = JSON.parse(request.body.read)
       saved_secret = Secret.create(new_data)
