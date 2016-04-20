@@ -7,8 +7,6 @@ Sequel.migration do
       String :username, unique: true, null: false
       String :password_encrypted, unique: false, null: false
       String :email, unique: true, null: false
-
-      set_allowed_columns :email
     end
   end
 end

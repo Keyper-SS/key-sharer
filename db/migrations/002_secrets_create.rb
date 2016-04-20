@@ -9,8 +9,6 @@ Sequel.migration do
       String :description, null: true
       String :account_encrypted, null: false
       String :password_encrypted, null: true
-
-      set_allowed_columns :title , :description
     end
   end
 end

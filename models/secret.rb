@@ -4,7 +4,9 @@ require 'sequel'
 
 # Holds the key information for each account
 class Secret < Sequel::Model
-  many_to_one :accounts
+  many_to_one :users
+
+  set_allowed_columns :title , :description
 
   def to_json(options = {})
     JSON({  type: 'secret',
@@ -12,8 +14,8 @@ class Secret < Sequel::Model
             data: {
               title: title,
               description: description,
-              share_account: share_account,
-              share_password: share_password
+              account_encrypted: account_encrypted,
+              password_encrypted: password_encrypted
             }
           },
          options)

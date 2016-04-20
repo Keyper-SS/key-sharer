@@ -2,7 +2,7 @@ require_relative './spec_helper'
 
 describe 'Testing Account resource routes' do
   before do
-    Account.dataset.delete
+    User.dataset.delete
     Secret.dataset.delete
   end
 
@@ -35,7 +35,7 @@ describe 'Testing Account resource routes' do
 
   describe 'Finding existing accounts' do
     it 'HAPPY: should find an existing account' do
-      new_account = Account.create(username: 'yiwei', password: '1234', email: 'yiwei@keyper.com')
+      new_account = User.create(username: 'yiwei', password: '1234', email: 'yiwei@keyper.com')
       new_secret = (1..3).map do |i|
           s = {
             title: "random_secret#{i}.rb",
@@ -57,14 +57,18 @@ describe 'Testing Account resource routes' do
     end
 
     it 'SAD: should not find non-existent accounts' do
-      get "/api/v1/accounts/#{invalid_id(Account)}"
+      get "/api/v1/accounts/#{invalid_id(User)}"
       _(last_response.status).must_equal 404
     end
   end
 
   describe 'Getting an index of existing accounts' do
     it 'HAPPY: should find list of existing accounts' do
-      (1..5).each { |i| Account.create(username: "asdf#{i}", password: '1234', email: "asdf#{i}@keyper.com") }
+      (1..5).each do |i| 
+        User.create(email: "asdf#{i}@keyper.com") 
+        User.username = "asdf#{i}"
+        User.password = '1234'
+      end
       result = get '/api/v1/accounts'
       projs = JSON.parse(result.body)
       _(projs['data'].count).must_equal 5

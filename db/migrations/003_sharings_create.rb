@@ -7,7 +7,6 @@ Sequel.migration do
       foreign_key :sharer_id, :users
       foreign_key :receiver_id, :users
       foreign_key :secret_id, :secrets
-
       unique [:sharer_id, :receiver_id, :secret_id]
     end
   end

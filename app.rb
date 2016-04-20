@@ -17,15 +17,15 @@ class ShareKeysAPI < Sinatra::Base
   get '/api/v1/accounts/?' do
     content_type 'application/json'
 
-    JSON.pretty_generate(data: Account.all)
+    JSON.pretty_generate(data: User.all)
   end
 
   get '/api/v1/accounts/:account_username' do
     content_type 'application/json'
 
     account_username = params[:account_username]
-    account = Account.where(username: account_username).first
-    secrets = account ? Account[account.id].secrets : []
+    account = User.where(username: account_username).first
+    secrets = account ? User[account.id].secrets : []
 
     if account
       JSON.pretty_generate(data: account, relationships: secrets)
@@ -52,11 +52,11 @@ class ShareKeysAPI < Sinatra::Base
 
   get '/api/v1/accounts/:account_username/keys/?' do
     content_type 'application/json'
-    account_username = params[:account_username]
-    account = Account.where(username: account_username).first
-    secrets_owned = account ? Account[account.id].secrets : []
-    secrets_shared = account ? Account[account.id].secrets_shared : []
-    secrets_received = account ? Account[account.id].secrets_received : []
+    account_username = params[:accoaunt_username]
+    account = User.where(username: account_username).first
+    secrets_owned = account ? User[account.id].secrets : []
+    secrets_shared = account ? User[account.id].secrets_shared : []
+    secrets_received = account ? User[account.id].secrets_received : []
 
     if account
       JSON.pretty_generate(data: account, keys: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
@@ -69,8 +69,8 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
     secret = nil
     account_username = params[:account_username]
-    account = Account.where(username: account_username).first
-    secrets_owned = account ? Account[account.id].secrets : []
+    account = User.where(username: account_username).first
+    secrets_owned = account ? User[account.id].secrets : []
     secrets_owned.each do |key| 
       if Integer(key.id) == Integer(params[:key_id])
         secret = key
@@ -78,7 +78,7 @@ class ShareKeysAPI < Sinatra::Base
     end
     
     if !secret
-      secrets_received = account ? Account[account.id].secrets_received : []
+      secrets_received = account ? User[account.id].secrets_received : []
       secrets_received.to_a.each do |key| 
         if Integer(key.id) == Integer(params[:key_id])
           secret = key
