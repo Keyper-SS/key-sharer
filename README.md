@@ -1,4 +1,4 @@
-# KeyShare API
+# KeyShare API [![Build Status](https://travis-ci.org/Keyper-SS/key-sharer.svg?branch=master)](https://travis-ci.org/Keyper-SS/key-sharer)
 API to store key and share
 
 ## Routes
