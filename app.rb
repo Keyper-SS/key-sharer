@@ -55,7 +55,7 @@ class ShareKeysAPI < Sinatra::Base
 
   get '/api/v1/accounts/:account_username/secrets/?' do
     content_type 'application/json'
-    account_username = params[:accoaunt_username]
+    account_username = params[:account_username]
     account = User.where(username: account_username).first
     secrets_owned = account ? User[account.id].secrets : []
     secrets_shared = account ? User[account.id].secrets_shared : []
