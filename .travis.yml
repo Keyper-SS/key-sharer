@@ -2,13 +2,9 @@ language: ruby
 rvm:
  - ruby-head
  - "2.2.3"
- - "2.1.0"
- - "1.9.3"
- - jruby-head
- - jruby-19mode
 matrix:
  allow_failures:
-  - rvm: jruby-head
+  - rvm: ruby-head
 branches:
  only:
   - master
