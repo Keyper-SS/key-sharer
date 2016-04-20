@@ -100,7 +100,10 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/accounts/:account_username/secrets/?' do
     begin
       new_data = JSON.parse(request.body.read)
-      saved_secret = Secret.create(new_data)
+      saved_secret = Secret.new(title: new_data["title"], description: new_data["description"])
+      saved_secret.account_encrypted = new_data["account_encrypted"]
+      saved_secret.password_encrypted = new_data["password_encrypted"]
+      saved_secret.save
     rescue => e
       logger.info "FAILED to create new secret: #{e.inspect}"
       halt 400
