@@ -2,7 +2,7 @@ require_relative './spec_helper'
 
 describe 'Testing Secret resource routes' do
   before do
-    Account.dataset.delete
+    User.dataset.delete
     Secret.dataset.delete
     Sharing.dataset.delete
   end
@@ -12,7 +12,7 @@ describe 'Testing Secret resource routes' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
       req_body = {
         username: 'esalazar',
-        password: '1234',
+        password_encrypted: '1234',
         email: 'test@example.com'
       }.to_json
       post '/api/v1/accounts/', req_body, req_header
@@ -24,8 +24,8 @@ describe 'Testing Secret resource routes' do
         account_id: 1,
         title: 'Netflix Account',
         description: 'netflix account',
-        share_account: 'esalazar',
-        share_password: '1234'
+        account_encrypted: 'esalazar',
+        password_encrypted: '1234'
       }.to_json
       post '/api/v1/accounts/1/secrets/', req_body, req_header
       _(last_response.status).must_equal 201
@@ -49,15 +49,15 @@ describe 'Testing Secret resource routes' do
 
   describe 'Finding existing secret' do
     it 'HAPPY: should find an existing keys' do
-      new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
+      new_account = User.new(email: 'esalazar@example.com')
+      new_account.username = 'test'
+      new_account.password_encrypted = '1234'
+      new_account.save
       new_secret = (1..3).map do |i|
-          s = {
-            title: "random_secret#{i}.rb",
-            description: "test string#{i}",
-            share_account: "asdf#{i}",
-            share_password: "1234",
-          }
-          new_account.add_secret(s)
+          secret = Secret.new(title: "random_secret#{i}.rb", description: "test string#{i}")
+          secret.account_encrypted = "asdf#{i}"
+          secret.password_encrypted = '1234'
+          new_account.add_secret(secret)
       end
 
       get "/api/v1/accounts/#{new_account.username}/secrets"
@@ -71,22 +71,22 @@ describe 'Testing Secret resource routes' do
     end
 
     it 'SAD: should not find non-existent accounts' do
-      get "/api/v1/accounts/#{invalid_id(Account)}/secrets"
+      get "/api/v1/accounts/#{invalid_id(User)}/secrets"
       _(last_response.status).must_equal 404
     end
   end
 
   describe 'Finding existing secret by given id' do
     it 'HAPPY: should find an existing keys' do
-      new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
+      new_account = User.new(email: 'esalazar@example.com')
+      new_account.username = 'test'
+      new_account.password_encrypted = '1234'
+      new_account.save
       new_secret = (1..3).map do |i|
-          s = {
-            title: "random_secret#{i}.rb",
-            description: "test string#{i}",
-            share_account: "asdf#{i}",
-            share_password: "1234",
-          }
-          new_account.add_secret(s)
+          secret = Secret.new(title: "random_secret#{i}.rb", description: "test string#{i}")
+          secret.account_encrypted = "asdf#{i}"
+          secret.password_encrypted = '1234'
+          new_account.add_secret(secret)
       end
       3.times do |i|
         get "/api/v1/accounts/#{new_account.username}/secrets/#{new_secret[i].id}"
@@ -99,7 +99,10 @@ describe 'Testing Secret resource routes' do
     end
 
     it 'SAD: should not find non-existent accounts' do
-      new_account = Account.create(username: 'esalazar', password: '1234', email: 'test@example.com')
+      new_account = User.new(email: 'esalazar@example.com')
+      new_account.username = 'test'
+      new_account.password_encrypted = '1234'
+      new_account.save
       get "/api/v1/accounts/#{new_account.id}/secrets/#{invalid_id(Secret)}"
       _(last_response.status).must_equal 404
     end

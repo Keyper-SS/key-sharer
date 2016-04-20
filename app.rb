@@ -17,15 +17,15 @@ class ShareKeysAPI < Sinatra::Base
   get '/api/v1/accounts/?' do
     content_type 'application/json'
 
-    JSON.pretty_generate(data: Account.all)
+    JSON.pretty_generate(data: User.all)
   end
 
   get '/api/v1/accounts/:account_username' do
     content_type 'application/json'
 
     account_username = params[:account_username]
-    account = Account.where(username: account_username).first
-    secrets = account ? Account[account.id].secrets : []
+    account = User.where(username: account_username).first
+    secrets = account ? User[account.id].secrets : []
 
     if account
       JSON.pretty_generate(data: account, relationships: secrets)
@@ -37,7 +37,10 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/accounts/?' do
     begin
       new_data = JSON.parse(request.body.read)
-      saved_account = Account.create(new_data)
+      saved_account = User.new(email: new_data["email"])
+      saved_account.username = new_data["username"]
+      saved_account.password_encrypted = new_data["password_encrypted"]
+      saved_account.save
     rescue => e
       logger.info "FAILED to create new project: #{e.inspect}"
       halt 400
@@ -53,10 +56,10 @@ class ShareKeysAPI < Sinatra::Base
   get '/api/v1/accounts/:account_username/secrets/?' do
     content_type 'application/json'
     account_username = params[:account_username]
-    account = Account.where(username: account_username).first
-    secrets_owned = account ? Account[account.id].secrets : []
-    secrets_shared = account ? Account[account.id].secrets_shared : []
-    secrets_received = account ? Account[account.id].secrets_received : []
+    account = User.where(username: account_username).first
+    secrets_owned = account ? User[account.id].secrets : []
+    secrets_shared = account ? User[account.id].secrets_shared : []
+    secrets_received = account ? User[account.id].secrets_received : []
 
     if account
       JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
@@ -69,9 +72,9 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
     secret_find = nil
     account_username = params[:account_username]
-    account = Account.where(username: account_username).first
+    account = User.where(username: account_username).first
 
-    secrets_owned = account ? Account[account.id].secrets : []
+    secrets_owned = account ? User[account.id].secrets : []
     secrets_owned.each do |secret|
       if Integer(secret.id) == Integer(params[:secret_id])
         secret_find = secret
@@ -79,7 +82,7 @@ class ShareKeysAPI < Sinatra::Base
     end
 
     if !secret_find
-      secrets_received = account ? Account[account.id].secrets_received : []
+      secrets_received = account ? User[account.id].secrets_received : []
       secrets_received.to_a.each do |secret|
         if Integer(secret.id) == Integer(params[:secret_id])
           secret_find = secret
@@ -97,7 +100,10 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/accounts/:account_username/secrets/?' do
     begin
       new_data = JSON.parse(request.body.read)
-      saved_secret = Secret.create(new_data)
+      saved_secret = Secret.new(title: new_data["title"], description: new_data["description"])
+      saved_secret.account_encrypted = new_data["account_encrypted"]
+      saved_secret.password_encrypted = new_data["password_encrypted"]
+      saved_secret.save
     rescue => e
       logger.info "FAILED to create new secret: #{e.inspect}"
       halt 400

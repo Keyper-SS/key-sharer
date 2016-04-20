@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+ - ruby-head
+ - "2.2.3"
+matrix:
+ allow_failures:
+  - rvm: ruby-head
+branches:
+ only:
+  - master
+# uncomment this line if your project needs to run something other than `rake`:
+script: bundle exec rake db:reset

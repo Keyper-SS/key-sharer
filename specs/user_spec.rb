@@ -2,7 +2,7 @@ require_relative './spec_helper'
 
 describe 'Testing Account resource routes' do
   before do
-    Account.dataset.delete
+    User.dataset.delete
     Secret.dataset.delete
   end
 
@@ -11,7 +11,7 @@ describe 'Testing Account resource routes' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
       req_body = {
         username: 'vicky',
-        password: '1234',
+        password_encrypted: '1234',
         email: 'vicky@keyper.com'
       }.to_json
       post '/api/v1/accounts/', req_body, req_header
@@ -23,7 +23,7 @@ describe 'Testing Account resource routes' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
       req_body = {
         username: 'vicky',
-        password: '1234',
+        password_encrypted: '1234',
         email: 'vicky@keyper.com'
       }.to_json
       post '/api/v1/accounts/', req_body, req_header
@@ -35,15 +35,15 @@ describe 'Testing Account resource routes' do
 
   describe 'Finding existing accounts' do
     it 'HAPPY: should find an existing account' do
-      new_account = Account.create(username: 'yiwei', password: '1234', email: 'yiwei@keyper.com')
+      new_account = User.new(email: 'yiwei@keyper.com')
+      new_account.username = 'yiwei'
+      new_account.password_encrypted = '1234'
+      new_account.save
       new_secret = (1..3).map do |i|
-          s = {
-            title: "random_secret#{i}.rb",
-            description: "test string#{i}",
-            share_account: "asdf#{i}",
-            share_password: "1234",
-          }
-          new_account.add_secret(s)
+          secret = Secret.new(title: "random_secret#{i}.rb", description: "test string#{i}")
+          secret.account_encrypted = "asdf#{i}"
+          secret.password_encrypted = '1234'
+          new_account.add_secret(secret)
       end
 
       get "/api/v1/accounts/#{new_account.username}"
@@ -57,14 +57,19 @@ describe 'Testing Account resource routes' do
     end
 
     it 'SAD: should not find non-existent accounts' do
-      get "/api/v1/accounts/#{invalid_id(Account)}"
+      get "/api/v1/accounts/#{invalid_id(User)}"
       _(last_response.status).must_equal 404
     end
   end
 
   describe 'Getting an index of existing accounts' do
     it 'HAPPY: should find list of existing accounts' do
-      (1..5).each { |i| Account.create(username: "asdf#{i}", password: '1234', email: "asdf#{i}@keyper.com") }
+      (1..5).each do |i| 
+        user = User.new(email: "asdf#{i}@keyper.com") 
+        user.username = "asdf#{i}"
+        user.password_encrypted = '1234'
+        user.save
+      end
       result = get '/api/v1/accounts'
       projs = JSON.parse(result.body)
       _(projs['data'].count).must_equal 5
