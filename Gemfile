@@ -5,6 +5,7 @@ gem 'sinatra'
 gem 'thin'
 gem 'json'
 gem 'sequel'
+gem 'rbnacl-libsodium'
 
 group :development do
   gem 'rerun'
