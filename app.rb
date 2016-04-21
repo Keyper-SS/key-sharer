@@ -14,67 +14,66 @@ class ShareKeysAPI < Sinatra::Base
     'KeyShare web service is up and running at /api/v1'
   end
 
-  get '/api/v1/accounts/?' do
+  get '/api/v1/users/?' do
     content_type 'application/json'
 
     JSON.pretty_generate(data: User.all)
   end
 
-  get '/api/v1/accounts/:account_username' do
+  get '/api/v1/users/:user_username' do
     content_type 'application/json'
 
-    account_username = params[:account_username]
-    account = User.where(username: account_username).first
-    secrets = account ? User[account.id].secrets : []
+    user_username = params[:user_username]
+    user = User.where(username: user_username).first
+    secrets = user ? User[user.id].secrets : []
 
-    if account
-      JSON.pretty_generate(data: account, relationships: secrets)
+    if user
+      JSON.pretty_generate(data: user, relationships: secrets)
     else
-      halt 404, "PROJECT NOT FOUND: #{account_username}"
+      halt 404, "USER NOT FOUND: #{user_username}"
     end
   end
 
-  post '/api/v1/accounts/?' do
+  post '/api/v1/users/?' do
     begin
-      new_data = JSON.parse(request.body.read)
-      saved_account = User.new(email: new_data["email"])
-      saved_account.username = new_data["username"]
-      saved_account.password_encrypted = new_data["password_encrypted"]
-      saved_account.save
+      user_data = JSON.parse(request.body.read)
+      saved_user = User.new(email: user_data['email'], username: user_data['username'])
+      saved_user.password = user_data['password']
+      saved_user.save
     rescue => e
-      logger.info "FAILED to create new project: #{e.inspect}"
+      logger.info "FAILED to create new user: #{e.inspect}"
       halt 400
     end
 
-    new_location = URI.join(@request_url.to_s + '/', saved_account.username.to_s)
+    new_location = URI.join(@request_url.to_s + '/', saved_user.username.to_s)
                       .to_s
 
     status 201
     headers('Location' => new_location)
   end
 
-  get '/api/v1/accounts/:account_username/secrets/?' do
+  get '/api/v1/users/:user_username/secrets/?' do
     content_type 'application/json'
-    account_username = params[:account_username]
-    account = User.where(username: account_username).first
-    secrets_owned = account ? User[account.id].secrets : []
-    secrets_shared = account ? User[account.id].secrets_shared : []
-    secrets_received = account ? User[account.id].secrets_received : []
+    user_username = params[:user_username]
+    user = User.where(username: user_username).first
+    secrets_owned = user ? User[user.id].secrets : []
+    secrets_shared = user ? User[user.id].secrets_shared : []
+    secrets_received = user ? User[user.id].secrets_received : []
 
-    if account
-      JSON.pretty_generate(data: account, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
+    if user
+      JSON.pretty_generate(data: user, secrets: { owned: secrets_owned , shared: secrets_shared , received: secrets_received})
     else
-      halt 404, "ACCOUNT NOT FOUND: #{account_username}"
+      halt 404, "ACCOUNT NOT FOUND: #{user_username}"
     end
   end
 
-  get '/api/v1/accounts/:account_username/secrets/:secret_id/?' do
+  get '/api/v1/users/:user_username/secrets/:secret_id/?' do
     content_type 'application/json'
     secret_find = nil
-    account_username = params[:account_username]
-    account = User.where(username: account_username).first
+    user_username = params[:user_username]
+    user = User.where(username: user_username).first
 
-    secrets_owned = account ? User[account.id].secrets : []
+    secrets_owned = user ? User[user.id].secrets : []
     secrets_owned.each do |secret|
       if Integer(secret.id) == Integer(params[:secret_id])
         secret_find = secret
@@ -82,7 +81,7 @@ class ShareKeysAPI < Sinatra::Base
     end
 
     if !secret_find
-      secrets_received = account ? User[account.id].secrets_received : []
+      secrets_received = user ? User[user.id].secrets_received : []
       secrets_received.to_a.each do |secret|
         if Integer(secret.id) == Integer(params[:secret_id])
           secret_find = secret
@@ -93,15 +92,15 @@ class ShareKeysAPI < Sinatra::Base
     if secret_find
       JSON.pretty_generate(data: secret_find)
     else
-      halt 404, "SECRET NOT FOUND OR YOU ARE NOT AUTHORIZED TO READ: #{account_username}"
+      halt 404, "SECRET NOT FOUND OR YOU ARE NOT AUTHORIZED TO READ: #{user_username}"
     end
   end
 
-  post '/api/v1/accounts/:account_username/secrets/?' do
+  post '/api/v1/users/:user_username/secrets/?' do
     begin
       new_data = JSON.parse(request.body.read)
       saved_secret = Secret.new(title: new_data["title"], description: new_data["description"])
-      saved_secret.account_encrypted = new_data["account_encrypted"]
+      saved_secret.user_encrypted = new_data["user_encrypted"]
       saved_secret.password_encrypted = new_data["password_encrypted"]
       saved_secret.save
     rescue => e
