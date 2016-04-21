@@ -4,6 +4,8 @@ require 'sequel'
 
 # Holds the key information for each account
 class Secret < Sequel::Model
+  include EncryptableModel
+  
   many_to_one :users
 
   set_allowed_columns :title , :description
