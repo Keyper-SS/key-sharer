@@ -4,9 +4,29 @@ require 'sequel'
 
 # Holds the key information for each account
 class Secret < Sequel::Model
+  include EncryptableModel
+  
   many_to_one :users
 
   set_allowed_columns :title , :description
+
+  def account=(account_plaintext)
+    @account = account_plaintext
+    self.account_encrypted = encrypt(@account)
+  end
+
+  def account
+    @account ||= decrypt(account_encrypted)
+  end
+
+  def password=(password_plaintext)
+    @password = password_plaintext
+    self.password_encrypted = encrypt(@password)
+  end
+
+  def password
+    @password ||= decrypt(password_encrypted)
+  end
 
   def to_json(options = {})
     JSON({  type: 'secret',
@@ -22,8 +42,3 @@ class Secret < Sequel::Model
   end
 
 end
-
-# TODO: implement a more complex primary key?
-# def new_id
-#   Base64.urlsafe_encode64(Digest::SHA256.digest(Time.now.to_s))[0..9]
-# end
