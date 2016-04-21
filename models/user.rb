@@ -10,7 +10,7 @@ class User < Sequel::Model
   many_to_many :secrets_received, :class=> :Secret , :left_key=>:receiver_id, :right_key=>:secret_id, :join_table=>:sharings
   many_to_many :secrets_shared, :class=> :Secret ,:left_key=>:sharer_id, :right_key=>:secret_id, :join_table=>:sharings
 
-  set_allowed_columns :email
+  set_allowed_columns :username, :email
 
   def password=(password_plaintext)
     @password = password_plaintext
