@@ -4,19 +4,18 @@ require 'sequel'
 
 # Holds the key information for each account
 class Sharing < Sequel::Model
-  many_to_one :secrets
+  many_to_many :secrets
 
-  # def to_json(options = {})
-  #   JSON({  type: 'sharing',
-  #           id: id,
-  #           data: {
-  #             title: title,
-  #             description: description,
-  #             share_account: share_account,
-  #             share_password: share_password
-  #           }
-  #         },
-  #        options)
-  # end
+  def to_json(options = {})
+    JSON({  type: 'sharing',
+            id: id,
+            attributes: {
+              sharer_id: sharer_id,
+              receiver_id: receiver_id,
+              secret_id: secret_id
+            }
+          },
+         options)
+  end
 
 end
