@@ -9,6 +9,7 @@ Sequel.migration do
       String :description, null: true
       String :account_encrypted, null: false
       String :password_encrypted, null: true
+      String :nonce
     end
   end
 end
