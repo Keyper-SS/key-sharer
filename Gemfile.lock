@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bond (0.5.1)
+    config_env (0.1.2)
     daemons (1.2.3)
     eventmachine (1.2.0.1)
     ffi (1.9.10)
@@ -20,6 +21,10 @@ GEM
     rb-fsevent (0.9.6)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    rbnacl (3.3.0)
+      ffi
+    rbnacl-libsodium (1.0.10)
+      rbnacl (>= 3.0.1)
     rerun (0.11.0)
       listen (~> 3.0)
     ripl (0.7.1)
@@ -51,15 +56,20 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  config_env
   hirb
   json
   minitest
   rack
   rack-test
   rake
+  rbnacl-libsodium
   rerun
   sequel
   sinatra
   sqlite3
   thin
   tux
+
+BUNDLED WITH
+   1.11.2
