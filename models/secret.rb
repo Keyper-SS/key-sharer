@@ -5,6 +5,7 @@ require 'sequel'
 # Holds the key information for each account
 class Secret < Sequel::Model
   include SecureModel
+  plugin :timestamps, update_on_create: true
 
   many_to_one :owner, class: :Account
 
