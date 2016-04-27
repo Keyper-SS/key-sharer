@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     create_table(:secrets) do
       primary_key :id
-      foreign_key :user_id
+      foreign_key :owner_id
       String :title, null: false
       String :description, null: true
       String :account_encrypted, null: false
