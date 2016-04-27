@@ -1,8 +1,4 @@
-require 'sinatra'
-require 'json'
-require_relative 'config/environments'
-require_relative 'models/init'
-require_relative 'services/init'
+
 
 # Configuration Sharing Web Service
 class ShareKeysAPI < Sinatra::Base

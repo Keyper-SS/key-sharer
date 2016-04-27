@@ -1,3 +1,5 @@
+require 'sinatra'
+
 configure :development do
   ENV['DATABASE_URL'] = 'sqlite://db/dev.db'
   require 'hirb'
