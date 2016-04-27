@@ -37,10 +37,10 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/users/?' do
     begin
       user_data = JSON.parse(request.body.read)
-      saved_user = User.new(username: user_data['username'],
-                            email: user_data['email'])
-      saved_user.password = user_data['password']
-      saved_user.save
+      saved_user = CreateUser.call(
+                    username: user_data['username'],
+                    email: user_data['email'],
+                    password: user_data['password'])
     rescue => e
       logger.info "FAILED to create new user: #{e.inspect}"
       halt 400
