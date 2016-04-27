@@ -17,5 +17,4 @@ class Sharing < Sequel::Model
           },
          options)
   end
-
 end
