@@ -46,7 +46,7 @@ describe 'Testing Secret resource routes' do
   describe 'Finding existing secret' do
     it 'HAPPY: should find an existing keys' do
       new_user = User.new(username: 'vicky',
-                               email: 'vicky@keyper.com')
+                          email: 'vicky@keyper.com')
       new_user.password = '1234'
       new_user.save
 
@@ -55,7 +55,7 @@ describe 'Testing Secret resource routes' do
                             description: "test string#{i}")
         secret.account = "vicky#{i}"
         secret.password = '1234'
-        new_user.add_secret(secret)
+        new_user.add_owned_secret(secret)
       end
 
       get "/api/v1/users/#{new_user.username}/secrets"
@@ -86,7 +86,7 @@ describe 'Testing Secret resource routes' do
                             description: "test string#{i}")
         secret.account = "asdf#{i}"
         secret.password = '1234'
-        new_user.add_secret(secret)
+        new_user.add_owned_secret(secret)
       end
 
       3.times do |i|
