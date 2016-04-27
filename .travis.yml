@@ -10,4 +10,5 @@ branches:
 # uncomment this line if your project needs to run something other than `rake`:
 script:
   - RACK_ENV=test bundle exec rake db:migrate
+  - bundle exec rake key:generate_file
   - bundle exec rake spec
