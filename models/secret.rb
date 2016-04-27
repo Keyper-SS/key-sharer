@@ -4,28 +4,26 @@ require 'sequel'
 
 # Holds the key information for each account
 class Secret < Sequel::Model
-  include EncryptableModel
-  
+  include SecureModel
+
   many_to_one :users
 
   set_allowed_columns :title , :description
 
-  def account=(account_plaintext)
-    @account = account_plaintext
-    self.account_encrypted = encrypt(@account)
+  def account=(acc_plaintext)
+    self.account_encrypted = encrypt(acc_plaintext) if acc_plaintext
   end
 
   def account
-    @account ||= decrypt(account_encrypted)
+    decrypt(account_encrypted)
   end
 
-  def password=(password_plaintext)
-    @password = password_plaintext
-    self.password_encrypted = encrypt(@password)
+  def password=(pw_plaintext)
+    self.password_encrypted = encrypt(pw_plaintext) if pw_plaintext
   end
 
   def password
-    @password ||= decrypt(password_encrypted)
+    decrypt(password_encrypted)
   end
 
   def to_json(options = {})
@@ -34,8 +32,8 @@ class Secret < Sequel::Model
             data: {
               title: title,
               description: description,
-              account_encrypted: account_encrypted,
-              password_encrypted: password_encrypted
+              account_encrypted: account,
+              password_encrypted: password
             }
           },
          options)
