@@ -9,6 +9,8 @@ Sequel.migration do
       String :description, null: true
       String :account_encrypted, null: false
       String :password_encrypted, null: true
+      DateTime :created_at
+      DateTime :updated_at
     end
   end
 end
