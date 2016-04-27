@@ -6,7 +6,7 @@ require 'sequel'
 class Secret < Sequel::Model
   include SecureModel
 
-  many_to_one :users
+  many_to_one :owner, class: :Account
 
   set_allowed_columns :title , :description
 

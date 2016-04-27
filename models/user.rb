@@ -6,20 +6,23 @@ require 'json'
 # Holds a User information
 class User < Sequel::Model
   include SecureModel
+  plugin :timestamps, update_on_create: true
 
-  one_to_many :secrets
-
-  many_to_many :secrets_received,
+  one_to_many :owned_secrets,
+              class: :Secret,
+              key: :owner_id
+  many_to_many :received_secrets,
                class: :Secret,
                left_key: :receiver_id, right_key: :secret_id,
                join_table: :sharings
-
-  many_to_many :secrets_shared,
+  many_to_many :shared_secrets,
                class: :Secret,
                left_key: :sharer_id, right_key: :secret_id,
                join_table: :sharings
 
   set_allowed_columns :username, :email
+
+  plugin :association_dependencies, owned_secrets: :destroy
 
   def password=(new_password)
     nacl = RbNaCl::Random.random_bytes(RbNaCl::PasswordHash::SCrypt::SALTBYTES)
