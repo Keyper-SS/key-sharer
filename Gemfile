@@ -21,6 +21,6 @@ group :test do
 end
 
 group :development, :test do
-   gem 'sqlite3'
-   gem 'config_env'
+  gem 'sqlite3'
+  gem 'config_env'
 end

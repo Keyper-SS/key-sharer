@@ -1,3 +1,4 @@
+# Service object to create new user using all columns
 class CreateUser
 	def self.call(username:, email:, password:)
 		user =  User.new(username: username,

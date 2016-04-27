@@ -2,7 +2,6 @@
 
 # Configuration Sharing Web Service
 class ShareKeysAPI < Sinatra::Base
-
   get '/api/v1/users/:user_username/secrets/?' do
     content_type 'application/json'
     user_username = params[:user_username]
@@ -28,9 +27,7 @@ class ShareKeysAPI < Sinatra::Base
 
     owned_secrets = user ? User[user.id].owned_secrets : []
     owned_secrets.each do |secret|
-      if Integer(secret.id) == Integer(params[:secret_id])
-        secret_find = secret
-      end
+      secret_find = secret if Integer(secret.id) == Integer(params[:secret_id])
     end
 
     if secret_find
@@ -43,11 +40,12 @@ class ShareKeysAPI < Sinatra::Base
   post '/api/v1/users/:user_username/secrets/?' do
     begin
       secret_data = JSON.parse(request.body.read)
-      secret = CreateSecret.call(title: secret_data['title'],
-                          description: secret_data['description'],
-                          username: params[:user_username],
-                          account: secret_data['account'],
-                          password: secret_data['password'])
+      secret = CreateSecret.call(
+        title: secret_data['title'],
+        description: secret_data['description'],
+        username: params[:user_username],
+        account: secret_data['account'],
+        password: secret_data['password'])
     rescue => e
       logger.info "FAILED to create new secret: #{e.inspect}"
       halt 400

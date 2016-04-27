@@ -1,9 +1,5 @@
-
-
 # Configuration Sharing Web Service
 class ShareKeysAPI < Sinatra::Base
- 
-
   get '/api/v1/users/?' do
     content_type 'application/json'
 
@@ -28,9 +24,9 @@ class ShareKeysAPI < Sinatra::Base
     begin
       user_data = JSON.parse(request.body.read)
       saved_user = CreateUser.call(
-                    username: user_data['username'],
-                    email: user_data['email'],
-                    password: user_data['password'])
+        username: user_data['username'],
+        email: user_data['email'],
+        password: user_data['password'])
     rescue => e
       logger.info "FAILED to create new user: #{e.inspect}"
       halt 400
@@ -42,5 +38,4 @@ class ShareKeysAPI < Sinatra::Base
     status 201
     headers('Location' => new_location)
   end
-
 end

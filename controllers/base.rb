@@ -11,5 +11,4 @@ class ShareKeysAPI < Sinatra::Base
   get '/?' do
     'KeyShare web service is up and running at /api/v1'
   end
-
 end
