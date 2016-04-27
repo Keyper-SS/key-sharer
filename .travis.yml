@@ -1,12 +1,13 @@
 language: ruby
 rvm:
- - ruby-head
- - "2.2.3"
-matrix:
- allow_failures:
-  - rvm: ruby-head
+ - 2.2.3
+env:
+  - DB=sqlite
 branches:
  only:
   - master
+
 # uncomment this line if your project needs to run something other than `rake`:
-script: bundle exec rake db:reset
+script:
+  - RACK_ENV=test bundle exec rake db:migrate
+  - bundle exec rake spec

@@ -59,7 +59,7 @@ describe 'Testing User resource routes' do
       (1..5).each do |i|
         user = User.new(email: "vicky#{i}@keyper.com")
         user.username = "vicky#{i}"
-        user.password_encrypted = '1234'
+        user.password = '1234'
         user.save
       end
       result = get '/api/v1/users'

@@ -7,9 +7,9 @@ class Secret < Sequel::Model
   include SecureModel
   plugin :timestamps, update_on_create: true
 
-  many_to_one :owner, class: :Account
+  many_to_one :owner, class: :User
 
-  set_allowed_columns :title , :description
+  set_allowed_columns :title, :description
 
   def account=(acc_plaintext)
     self.account_encrypted = encrypt(acc_plaintext) if acc_plaintext
@@ -39,5 +39,4 @@ class Secret < Sequel::Model
           },
          options)
   end
-
 end
