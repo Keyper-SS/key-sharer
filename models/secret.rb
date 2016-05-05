@@ -4,7 +4,6 @@ require 'sequel'
 
 # Holds the key information for each account
 class Secret < Sequel::Model
-  include SecureModel
   plugin :timestamps, update_on_create: true
 
   many_to_one :owner, class: :User
@@ -12,19 +11,19 @@ class Secret < Sequel::Model
   set_allowed_columns :title, :description
 
   def account=(acc_plaintext)
-    self.account_encrypted = encrypt(acc_plaintext) if acc_plaintext
+    self.account_encrypted = SecureDB.encrypt(acc_plaintext) if acc_plaintext
   end
 
   def account
-    decrypt(account_encrypted)
+    SecureDB.decrypt(account_encrypted)
   end
 
   def password=(pw_plaintext)
-    self.password_encrypted = encrypt(pw_plaintext) if pw_plaintext
+    self.password_encrypted = SecureDB.encrypt(pw_plaintext) if pw_plaintext
   end
 
   def password
-    decrypt(password_encrypted)
+    SecureDB.decrypt(password_encrypted)
   end
 
   def to_json(options = {})
