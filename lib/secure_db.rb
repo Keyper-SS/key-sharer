@@ -2,12 +2,12 @@ require 'base64'
 require 'rbnacl/libsodium'
 
 # For mixing into a model
-module SecureModel
-  def key
-    @key ||= Base64.strict_decode64(ENV['DB_KEY'])
+class SecureDB
+  def self.key
+    Base64.strict_decode64(ENV['DB_KEY'])
   end
 
-  def encrypt(plaintext)
+  def self.encrypt(plaintext)
     if plaintext
       simple_box = RbNaCl::SimpleBox.from_secret_key(key)
       ciphertext = simple_box.encrypt(plaintext)
@@ -15,7 +15,7 @@ module SecureModel
     end
   end
 
-  def decrypt(ciphertext_64)
+  def self.decrypt(ciphertext_64)
     if ciphertext_64
       simple_box = RbNaCl::SimpleBox.from_secret_key(key)
       ciphertext = Base64.strict_decode64(ciphertext_64)
@@ -23,10 +23,17 @@ module SecureModel
     end
   end
 
-  def hash_password(salt, pwd)
+  def self.new_salt
+    Base64.strict_encode64(
+      RbNaCl::Random.random_bytes(RbNaCl::PasswordHash::SCrypt::SALTBYTES))
+  end
+
+  def self.hash_password(salt, pwd)
     opslimit = 2**20
     memlimit = 2**24
     digest_size = 64
-    RbNaCl::PasswordHash.scrypt(pwd, salt, opslimit, memlimit, digest_size)
+    digest = RbNaCl::PasswordHash.scrypt(pwd, Base64.strict_decode64(salt),
+                                         opslimit, memlimit, digest_size)
+    Base64.strict_encode64(digest)
   end
 end
