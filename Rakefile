@@ -5,14 +5,14 @@ require 'rake/testtask'
 
 task :default => [:spec]
 
-namespace :deploy do
-  require 'config_env/rake_tasks'
-  ConfigEnv.path_to_config("#{__dir__}/config/config_env.rb")
+# namespace :deploy do
+#   require 'config_env/rake_tasks'
+#   ConfigEnv.path_to_config("#{__dir__}/config/config_env.rb")
 
-  task :config do
-    Rake::Task['deploy:config_env:heroku'].invoke
-  end
-end
+#   task :config do
+#     Rake::Task['deploy:config_env:heroku'].invoke
+#   end
+# end
 
 namespace :db do
   require 'sequel'
