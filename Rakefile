@@ -33,7 +33,7 @@ namespace :db do
 
   desc 'Populate the database with test values'
   task :seed do
-    load './db/seeds/user_secret.rb'
+    load './db/seeds/user_secret_sharing.rb'
   end
 
   desc 'Reset and repopulate database'
