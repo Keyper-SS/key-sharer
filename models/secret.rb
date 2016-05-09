@@ -2,7 +2,7 @@ require 'json'
 require 'base64'
 require 'sequel'
 
-# Holds the key information for each account
+# Holds the Secret information for each account
 class Secret < Sequel::Model
   plugin :timestamps, update_on_create: true
 
