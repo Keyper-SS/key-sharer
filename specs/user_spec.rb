@@ -36,10 +36,10 @@ describe 'Testing User resource routes' do
 
   describe 'Finding existing users' do
     it 'HAPPY: should find an existing user' do
-      new_user = User.new(email: 'vicky@keyper.com')
-      new_user.username = 'vicky'
-      new_user.password = '1234'
-      new_user.save
+      new_user = CreateUser.call(
+        username: 'vicky',
+        email: 'vicky@keyper.com',
+        password: '1234')
 
       get "/api/v1/users/#{new_user.username}"
       _(last_response.status).must_equal 200
@@ -57,10 +57,10 @@ describe 'Testing User resource routes' do
   describe 'Getting an index of existing users' do
     it 'HAPPY: should find list of existing users' do
       (1..5).each do |i|
-        user = User.new(email: "vicky#{i}@keyper.com")
-        user.username = "vicky#{i}"
-        user.password = '1234'
-        user.save
+        CreateUser.call(
+          username: "vicky#{i}",
+          email: "vicky#{i}@keyper.com",
+          password: '1234')
       end
       result = get '/api/v1/users'
       projs = JSON.parse(result.body)
