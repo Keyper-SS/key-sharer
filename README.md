@@ -9,6 +9,7 @@ API to store key and share
   - returns a json of all information about a user
 - POST `api/v1/users`:
   - add a new user to DB
+
 ### Secret Routes Overview
 - GET `api/v1/users/[user_username]/owned_secrets`:
   -  return secrets of this user have **owned**
