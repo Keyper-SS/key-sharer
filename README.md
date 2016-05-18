@@ -38,21 +38,24 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
       "type": "user",
       "id": 1,
       "attributes": {
-        "username": "vicky"
+        "username": "vicky",
+        "email": "vicky@test.com"
       }
     },
     {
       "type": "user",
       "id": 2,
       "attributes": {
-        "username": "eduardo"
+        "username": "eduardo",
+        "email": "eduardo@test.com"
       }
     },
     {
       "type": "user",
       "id": 3,
       "attributes": {
-        "username": "yiwei"
+        "username": "yiwei",
+        "email": "yiwei@test.com"
       }
     }
   ]
@@ -66,7 +69,8 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
     "type": "user",
     "id": 1,
     "attributes": {
-      "username": "vicky"
+      "username": "vicky",
+      "email": "vicky@test.com"
     }
   },
   "relationships": [
@@ -126,7 +130,8 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
     "type": "user",
     "id": 1,
     "attributes": {
-      "username": "vicky"
+      "username": "vicky",
+      "email": "vicky@test.com"
     }
   },
   "owned_secrets": [
@@ -171,7 +176,8 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
     "type": "user",
     "id": 1,
     "attributes": {
-      "username": "vicky"
+      "username": "vicky",
+      "email": "vicky@test.com"
     }
   },
   "shared_secrets": [
@@ -206,7 +212,8 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
     "type": "user",
     "id": 1,
     "attributes": {
-      "username": "vicky"
+      "username": "vicky",
+      "email": "vicky@test.com"
     }
   },
   "received_secrets": [
