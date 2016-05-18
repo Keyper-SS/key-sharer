@@ -39,7 +39,8 @@ class User < Sequel::Model
     JSON({  type: 'user',
             id: id,
             attributes: {
-              username: username
+              username: username,
+              email: email
             }
           },
          options)
