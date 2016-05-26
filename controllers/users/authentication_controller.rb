@@ -4,12 +4,13 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
 
     credentials = JSON.parse(request.body.read)
-    user = FindAndAuthenticateUser.call(
+    user, auth_token = AuthenticateUser.call(
       username: credentials['username'],
       password: credentials['password'])
 
     if user
-      user.to_json
+      { user: user,
+        auth_token: auth_token }.to_json
     else
       halt 401, 'User could not be authenticated'
     end
