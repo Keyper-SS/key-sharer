@@ -1,14 +1,14 @@
 class ShareKeysAPI < Sinatra::Base
-  get '/api/v1/users/:username/received_secrets/?' do
+  get '/api/v1/users/:id/received_secrets/?' do
     content_type 'application/json'
-    username = params[:username]
-    user = User.where(username: username).first
-    received_secrets = user ? User[user.id].received_secrets : []
-
-    if user
-      JSON.pretty_generate(data: user, received_secrets:  received_secrets)
-    else
-      halt 404, "ACCOUNT NOT FOUND: #{username}"
+    begin
+      id = params[:id]
+      halt 401 unless authorized_account?(env, id)
+      received_secrets = FindReceivedSecrets(id: id)
+      JSON.pretty_generate(data: received_secrets)
+    rescue => e
+      logger.info "FAILED to find received secrest for user: #{e}"
+      halt 404
     end
   end
 end
