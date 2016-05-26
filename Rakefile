@@ -60,7 +60,6 @@ namespace :key do
     db_key = RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes)
     jwk256 = RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes)
 
-    puts "KEY: #{Base64.strict_encode64 key}"
     content = "
     # Copy this file to [app]/config/config_env.rb\n
     # Replace [*] with credentials/keys/etc.\n
