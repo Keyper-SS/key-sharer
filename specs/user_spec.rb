@@ -84,9 +84,13 @@ describe 'Testing User resource routes' do
     end
 
     it 'HAPPY: should be able to authenticate a real account' do
-      login_with(username: 'vicky', password: '1234')
-      _(last_response.status).must_equal 200
-    end
+       login_with(username: 'vicky', password: '1234')
+       _(last_response.status).must_equal 200
+       response = JSON.parse(last_response.body)
+       _(response['user']).wont_equal nil
+       _(response['auth_token']).wont_equal nil
+     end
+
 
     it 'SAD: should not authenticate an account with wrong password' do
       login_with(username: 'vicky', password: '0000')
