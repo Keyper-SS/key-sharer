@@ -67,4 +67,40 @@ describe 'Testing User resource routes' do
       _(projs['data'].count).must_equal 5
     end
   end
+
+  describe 'Authenticating an account' do
+    def login_with(username:, password:)
+      req_header = { 'CONTENT_TYPE' => 'application/json' }
+      req_body = { username: username,
+                   password: password }.to_json
+      post '/api/v1/users/authenticate', req_body, req_header
+    end
+
+    before do
+      @account = CreateUser.call(
+        username: 'vicky',
+        password: '1234',
+        email: 'vicky@keyper.com')
+    end
+
+    it 'HAPPY: should be able to authenticate a real account' do
+      login_with(username: 'vicky', password: '1234')
+      _(last_response.status).must_equal 200
+    end
+
+    it 'SAD: should not authenticate an account with wrong password' do
+      login_with(username: 'vicky', password: '0000')
+      _(last_response.status).must_equal 401
+    end
+
+    it 'SAD: should not authenticate an account with an invalid username' do
+      login_with(username: 'randomuser', password: '1234')
+      _(last_response.status).must_equal 401
+    end
+
+    it 'BAD: should not authenticate an account without password' do
+      login_with(username: 'vicky', password: '')
+      _(last_response.status).must_equal 401
+    end
+  end
 end

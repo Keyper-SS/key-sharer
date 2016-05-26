@@ -1,18 +1,17 @@
 # Sinatra Application Controllers
 class ShareKeysAPI < Sinatra::Base
-  get '/api/v1/users/:username/authenticate' do
+  post '/api/v1/users/authenticate' do
     content_type 'application/json'
 
-    username = params[:username]
-    password = params[:password]
-
+    credentials = JSON.parse(request.body.read)
     user = FindAndAuthenticateUser.call(
-      username: username, password: password)
+      username: credentials['username'],
+      password: credentials['password'])
 
     if user
       user.to_json
     else
-      halt 401, "User #{username} could not be authenticated"
+      halt 401, 'User could not be authenticated'
     end
   end
 end

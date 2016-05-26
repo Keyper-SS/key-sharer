@@ -8,6 +8,7 @@ gem 'sequel'
 gem 'rbnacl-libsodium'
 gem 'tux'
 gem 'hirb'
+gem 'rack-ssl-enforcer'
 
 group :development do
   gem 'rerun'
