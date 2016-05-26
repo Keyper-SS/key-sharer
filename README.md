@@ -31,39 +31,7 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 
 #### Users
 
-**GET `api/v1/users`**
-```
-{
-  "data": [
-    {
-      "type": "user",
-      "id": 1,
-      "attributes": {
-        "username": "vicky",
-        "email": "vicky@test.com"
-      }
-    },
-    {
-      "type": "user",
-      "id": 2,
-      "attributes": {
-        "username": "eduardo",
-        "email": "eduardo@test.com"
-      }
-    },
-    {
-      "type": "user",
-      "id": 3,
-      "attributes": {
-        "username": "yiwei",
-        "email": "yiwei@test.com"
-      }
-    }
-  ]
-}
-```
-
-**GET api/v1/users/vicky**
+**GET api/v1/users/1**
 ```
 {
   "data": {
@@ -124,18 +92,10 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 
 #### Secret
 
-**GET api/v1/users/vicky/owned_secrets**
+**GET api/v1/users/1/owned_secrets**
 ```
 {
-  "data": {
-    "type": "user",
-    "id": 1,
-    "attributes": {
-      "username": "vicky",
-      "email": "vicky@test.com"
-    }
-  },
-  "owned_secrets": [
+  "data": [
     {
       "type": "secret",
       "id": 1,
@@ -173,32 +133,24 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 **GET api/v1/users/vicky/shared_secrets**
 ```
 {
-  "data": {
-    "type": "user",
-    "id": 1,
-    "attributes": {
-      "username": "vicky",
-      "email": "vicky@test.com"
-    }
-  },
-  "shared_secrets": [
+  "data": [
     {
       "type": "secret",
-      "id": 2,
+      "id": 8,
       "data": {
         "title": "netflix account",
         "description": "netflix",
-        "account_encrypted": "vicky_netflix",
-        "password_encrypted": "v12345678"
+        "account_encrypted": "yiwei_netflix",
+        "password_encrypted": "w12345678"
       }
     },
     {
       "type": "secret",
-      "id": 3,
+      "id": 6,
       "data": {
-        "title": "vicky visa card",
-        "description": "vicky visa card, only card id",
-        "account_encrypted": "vicky_card_111",
+        "title": "eduardo visa card",
+        "description": "eduardo visa card, only card id",
+        "account_encrypted": "eduardo_card_2222",
         "password_encrypted": null
       }
     }
@@ -209,15 +161,7 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 **GET api/v1/users/vicky/received_secrets**
 ```
 {
-  "data": {
-    "type": "user",
-    "id": 1,
-    "attributes": {
-      "username": "vicky",
-      "email": "vicky@test.com"
-    }
-  },
-  "received_secrets": [
+  "data": [
     {
       "type": "secret",
       "id": 8,

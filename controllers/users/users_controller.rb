@@ -1,22 +1,15 @@
 # Configuration Sharing Web Service
 class ShareKeysAPI < Sinatra::Base
-  get '/api/v1/users/?' do
+  get '/api/v1/users/:id' do
     content_type 'application/json'
 
-    JSON.pretty_generate(data: User.all)
-  end
-
-  get '/api/v1/users/:user_username' do
-    content_type 'application/json'
-
-    user_username = params[:user_username]
-    user = User.where(username: user_username).first
-    secrets = user ? User[user.id].owned_secrets : []
-
+    id = params[:id]
+    halt 401 unless authorized_user?(env, id)
+    user = User.where(id: id).first
     if user
-      JSON.pretty_generate(data: user, relationships: secrets)
+      JSON.pretty_generate(data: user, relationships: user.owned_secrets)
     else
-      halt 404, "USER NOT FOUND: #{user_username}"
+      halt 404, "USER NOT FOUND: #{id}"
     end
   end
 

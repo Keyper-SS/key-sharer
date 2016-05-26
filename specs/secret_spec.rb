@@ -22,7 +22,7 @@ describe 'Testing Secret resource routes' do
         password: '1234'
       }.to_json
 
-      post_secret_url = "/api/v1/users/#{existing_user.username}/owned_secrets/"
+      post_secret_url = "/api/v1/users/#{existing_user.id}/owned_secrets/"
       post post_secret_url, req_body, req_header
       _(last_response.status).must_equal 201
       _(last_response.location).must_match(%r{http://})
@@ -45,28 +45,26 @@ describe 'Testing Secret resource routes' do
 
   describe 'Finding existing owned secret' do
     it 'HAPPY: should find an existing secrets' do
-      new_user = CreateUser.call(
+      @new_user = CreateUser.call(
         username: 'vicky',
         email: 'vicky@keyper.com',
         password: '1234')
-
-      new_secret = (1..3).map do |i|
+      @new_secret = (1..3).map do |i|
         CreateSecret.call(
           title: "random_secret#{i}.rb",
           description: "test string#{i}",
-          username: 'vicky',
+          id: @new_user.id,
           account: "vicky#{i}",
           password: '1234'
         )
       end
 
-      get "/api/v1/users/#{new_user.username}/owned_secrets"
+      get "/api/v1/users/#{@new_user.id}/owned_secrets"
       _(last_response.status).must_equal 200
 
       results = JSON.parse(last_response.body)
-      _(results['data']['id']).must_equal new_user.id
       3.times do |i|
-        _(results['owned_secrets'][i]['id']).must_equal new_secret[i].id
+        _(results['data'][i]['id']).must_equal @new_secret[i].id
       end
     end
 

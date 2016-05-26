@@ -1,7 +1,7 @@
 require 'base64'
 require 'rbnacl/libsodium'
 
-# For mixing into a model
+# Encrypt and Decrypt from Database
 class SecureDB
   def self.key
     Base64.strict_decode64(ENV['DB_KEY'])

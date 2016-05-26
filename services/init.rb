@@ -1,4 +1,6 @@
 require_relative 'create_user'
 require_relative 'create_secret'
 require_relative 'create_sharing'
-require_relative 'find_and_authenticate_user'
+require_relative 'authenticate_user'
+require_relative 'find_shared_secrets'
+require_relative 'find_received_secrets'
