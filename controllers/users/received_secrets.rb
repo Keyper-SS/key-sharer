@@ -3,8 +3,9 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
     begin
       id = params[:id]
-      halt 401 unless authorized_account?(env, id)
-      received_secrets = FindReceivedSecrets(id: id)
+      halt 401 unless authorized_user?(env, id)
+      puts id
+      received_secrets = FindReceivedSecrets.call(id: id)
       JSON.pretty_generate(data: received_secrets)
     rescue => e
       logger.info "FAILED to find received secrest for user: #{e}"

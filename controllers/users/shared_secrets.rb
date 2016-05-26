@@ -4,7 +4,7 @@ class ShareKeysAPI < Sinatra::Base
     begin
       id = params[:id]
       halt 401 unless authorized_user?(env, id)
-      shared_secrets = FindSharedSecrets(id: id)
+      shared_secrets = FindSharedSecrets.call(id: id)
       JSON.pretty_generate(data: shared_secrets)
     rescue => e
       logger.info "FAILED to find shared secrest for user: #{e}"
