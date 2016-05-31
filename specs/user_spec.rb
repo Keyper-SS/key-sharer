@@ -62,14 +62,12 @@ describe 'Testing User resource routes' do
         email: 'vicky@keyper.com',
         password: '1234')
 
-      _, @auth_token =
+      @user, @auth_token =
         AuthenticateUser.call(username: 'vicky', password: '1234')
     end
 
     it 'HAPPY: should find an existing user' do
-      puts @new_user.id
-      puts @auth_token
-      get "/api/v1/users/#{@new_user.id}", nil,
+      get "/api/v1/users/#{@user.id}", nil,
           { "HTTP_AUTHORIZATION" => "Bearer #{@auth_token}" }
 
       _(last_response.status).must_equal 200
