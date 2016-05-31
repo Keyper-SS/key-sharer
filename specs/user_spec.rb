@@ -67,6 +67,8 @@ describe 'Testing User resource routes' do
     end
 
     it 'HAPPY: should find an existing user' do
+      puts @new_user.id
+      puts @auth_token
       get "/api/v1/users/#{@new_user.id}", nil,
           { "HTTP_AUTHORIZATION" => "Bearer #{@auth_token}" }
 
