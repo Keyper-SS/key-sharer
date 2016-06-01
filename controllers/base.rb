@@ -18,6 +18,10 @@ class ShareKeysAPI < Sinatra::Base
 
   def authorized_user?(env, id)
     user = authenticated_user(env)
+    puts id
+    puts env
+    puts user['id']
+    puts user['id'] == id.to_i
     user['id'] == id.to_i
   rescue
     false
