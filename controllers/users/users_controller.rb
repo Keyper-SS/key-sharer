@@ -4,6 +4,11 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
 
     id = params[:id]
+    puts 'env:'
+    puts env
+    puts 'id'
+    puts id
+    puts 'start athorized'
     halt 401 unless authorized_user?(env, id)
     user = User.where(id: id).first
     if user
