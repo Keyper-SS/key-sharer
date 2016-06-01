@@ -11,12 +11,14 @@ class ShareKeysAPI < Sinatra::Base
   end
 
   def authenticated_user(env)
+    puts 'in authenticated_user function'
     scheme, auth_token = env['HTTP_AUTHORIZATION'].split(' ')
     user_payload = JSON.load JWE.decrypt(auth_token)
     (scheme =~ /^Bearer$/i) ? user_payload : nil
   end
 
   def authorized_user?(env, id)
+    puts 'in authorized_user function'
     user = authenticated_user(env)
     puts id
     puts user['id']
