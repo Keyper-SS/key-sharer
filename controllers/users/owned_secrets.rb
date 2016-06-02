@@ -4,7 +4,19 @@ class ShareKeysAPI < Sinatra::Base
     content_type 'application/json'
     begin
       owner = User[params[:owner_id]]
-      JSON.pretty_generate(data: owner.owned_secrets)
+      owned_secrets = owner.owned_secrets.map do |s|
+        {
+          'secret_id' => s.id,
+          'data' => {
+            'title' => s.title,
+            'description' => s.description,
+            'account' => s.account,
+            'password' => s.password
+          }
+        }
+      end
+
+      JSON.pretty_generate(data: owned_secrets)
     rescue => e
       logger.info "FAILED to find secrets for user #{params[:owner_id]}: #{e}"
       halt 404
