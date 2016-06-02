@@ -11,17 +11,22 @@ class JWE
   end
 
   def self.decrypt(jwe_compact)
-    puts "in encrypt"
-    puts "jwk: #{jwk256}"
-    puts "jwe compact #{jwe_compact}"
+    puts "\nin encrypt"
+    puts "'jwk' #{jwk256}"
+    puts "'jwe' compact #{jwe_compact}"
     jwt, jwe = JOSE::JWE.block_decrypt(jwk256, jwe_compact)
+    puts "'jwt' #{jwt}"
+    puts "'jwe' #{jwe}"
+    puts "expired? #{expired?(jwe)}"
     expired?(jwe) ? nil : jwt
   end
 
   private_class_method
 
   def self.jwk256
-    puts "read ENV 'JWK267' #{ENV['JWK256']}"
+    puts "\nin encode jwk256"
+    puts "read ENV 'JWK256' #{ENV['JWK256']}"
+    puts "decode 64: #{JOSE::JWK.from_oct(Base64.decode64(ENV['JWK256']))}"
     JOSE::JWK.from_oct(Base64.decode64(ENV['JWK256']))
   end
 
