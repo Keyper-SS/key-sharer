@@ -64,7 +64,7 @@ describe 'Testing Secret resource routes' do
 
       results = JSON.parse(last_response.body)
       3.times do |i|
-        _(results['data'][i]['id']).must_equal @new_secret[i].id
+        _(results['data'][i]['secret_id']).must_equal @new_secret[i].id
       end
     end
 
