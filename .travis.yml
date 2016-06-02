@@ -7,7 +7,6 @@ rvm:
  - 2.3.1
 env:
   - DB=sqlite
-  global:
   - JOSE_CRYPTO_FALLBACK=true
   - RUBYOPT="-W0"
 
