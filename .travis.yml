@@ -1,11 +1,20 @@
 language: ruby
+
+sudo: required
+dist: trusty
+
 rvm:
- - 2.2.3
+ - 2.3.1
 env:
   - DB=sqlite
+
 branches:
  only:
   - master
+
+before_install:
+  - sudo apt-get update
+
 
 # uncomment this line if your project needs to run something other than `rake`:
 script:

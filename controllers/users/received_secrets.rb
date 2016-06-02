@@ -4,7 +4,6 @@ class ShareKeysAPI < Sinatra::Base
     begin
       id = params[:id]
       halt 401 unless authorized_user?(env, id)
-      puts id
       received_secrets = FindReceivedSecrets.call(id: id)
       JSON.pretty_generate(data: received_secrets)
     rescue => e
