@@ -11,16 +11,16 @@ API to store key and share
   - add a new user to DB
 
 ### Secret Routes Overview
-- GET `api/v1/users/[user_username]/owned_secrets`:
+- GET `api/v1/users/[user_id]/owned_secrets`:
   -  return secrets of this user have **owned**
 
-- GET `api/v1/users/[user_username]/shared_secrets`:
+- GET `api/v1/users/[user_id]/shared_secrets`:
   - return secrets of this user have **shared**
 
-- GET `api/v1/users/[user_username]/received_secrets`:
+- GET `api/v1/users/[user_id]/received_secrets`:
   - return secrets of this user have **received**
 
-- POST `api/v1/users/[user_username]/owned_secrets`:
+- POST `api/v1/users/[user_id]/owned_secrets`:
   - create new secret for a certain user
 
 
@@ -130,7 +130,7 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 }
 ```
 
-**GET api/v1/users/vicky/shared_secrets**
+**GET api/v1/users/1/shared_secrets**
 ```
 {
   "data": [
@@ -158,7 +158,7 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 }
 ```
 
-**GET api/v1/users/vicky/received_secrets**
+**GET api/v1/users/1/received_secrets**
 ```
 {
   "data": [
@@ -186,7 +186,7 @@ To see what have been stored in the db please look at `db/seeds/user_secret_shar
 }
 ```
 
-**POST api/v1/users/vicky/owned_secrets**
+**POST api/v1/users/1/owned_secrets**
 ```ruby
 # post json example
 {

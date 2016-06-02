@@ -12,10 +12,6 @@ branches:
  only:
   - master
 
-before_install:
-  - sudo apt-get update
-
-
 # uncomment this line if your project needs to run something other than `rake`:
 script:
   - RACK_ENV=test bundle exec rake db:migrate
