@@ -22,5 +22,4 @@ before_install:
 script:
   - RACK_ENV=test bundle exec rake db:migrate
   - bundle exec rake key:generate_file
-  - cat config/config_env.rb
   - bundle exec rake spec
