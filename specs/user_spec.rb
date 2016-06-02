@@ -67,8 +67,6 @@ describe 'Testing User resource routes' do
     end
 
     it 'HAPPY: should find an existing user' do
-      puts ''
-      puts "\n\n\nshould find an exsting user"
       get "/api/v1/users/#{@user.id}", nil,
           { "HTTP_AUTHORIZATION" => "Bearer #{@auth_token}" }
 
@@ -79,17 +77,11 @@ describe 'Testing User resource routes' do
     end
 
     it 'SAD: should not find non-existent users' do
-      puts ''
-      puts "\n\n\nshould not find non-existent users"
-
       get "/api/v1/users/#{invalid_id(User)}"
       _(last_response.status).must_equal 401
     end
 
     it 'SAD: should not return user without authorization' do
-      puts ''
-      puts "\n\n\nshould not return user without authorization"
-
       get "/api/v1/users/#{@new_user.id}"
       _(last_response.status).must_equal 401
     end
