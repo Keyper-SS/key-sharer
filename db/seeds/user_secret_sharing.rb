@@ -16,63 +16,63 @@ user_yiwei = CreateUser.call(
 vicky_google = CreateSecret.call(
   title: 'google account',
   description: 'google',
-  id: 1,
+  owner_id: 1,
   account: 'vicky_google',
   password: 'v12345678')
 
 vicky_netflix = CreateSecret.call(
   title: 'netflix account',
   description: 'netflix',
-  id: 1,
+  owner_id: 1,
   account: 'vicky_netflix',
   password: 'v12345678')
 
 vicky_card = CreateSecret.call(
   title: 'vicky visa card',
-  description: 'vicky visa card, only card id',
-  id: 1,
+  description: 'vicky visa card, only card owner_id',
+  owner_id: 1,
   account: 'vicky_card_111',
   password: nil)
 
 eduardo_google = CreateSecret.call(
   title: 'google account',
   description: 'google',
-  id: 2,
+  owner_id: 2,
   account: 'eduardo_google',
   password: 'e12345678')
 
 eduardo_netflix = CreateSecret.call(
   title: 'netflix account',
   description: 'netflix',
-  id: 2,
+  owner_id: 2,
   account: 'eduardo_netflix',
   password: 'e12345678')
 
 eduardo_card = CreateSecret.call(
   title: 'eduardo visa card',
-  description: 'eduardo visa card, only card id',
-  id: 2,
+  description: 'eduardo visa card, only card owner_id',
+  owner_id: 2,
   account: 'eduardo_card_2222',
   password: nil)
 
 yiwei_google = CreateSecret.call(
   title: 'google account',
   description: 'google',
-  id: 3,
+  owner_id: 3,
   account: 'yiwei_google',
   password: 'w12345678')
 
 yiwei_netflix = CreateSecret.call(
   title: 'netflix account',
   description: 'netflix',
-  id: 3,
+  owner_id: 3,
   account: 'yiwei_netflix',
   password: 'w12345678')
 
 yiwei_card = CreateSecret.call(
   title: 'yiwei visa card',
-  description: 'yiwei visa card, only card id',
-  id: 3,
+  description: 'yiwei visa card, only card owner_id',
+  owner_id: 3,
   account: 'yiwei_card_3333',
   password: nil)
 
