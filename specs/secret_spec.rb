@@ -8,13 +8,25 @@ describe 'Testing Secret resource routes' do
   end
 
   describe 'Creating new secret' do
-    it 'HAPPY: should create a new unique user and secret' do
-      existing_user = CreateUser.call(
+    before do
+      @new_user = CreateUser.call(
         username: 'vicky',
         email: 'vicky@keyper.com',
-        password: '1234')
+        password: '1234'
+      )
 
-      req_header = { 'CONTENT_TYPE' => 'application/json' }
+      @user, @auth_token = AuthenticateUser.call(
+        username: 'vicky',
+        password: '1234'
+      )
+    end
+
+    it 'HAPPY: should create a new unique user and secret' do
+      req_header = {
+        'CONTENT_TYPE' => 'application/json',
+        'HTTP_AUTHORIZATION' => "Bearer #{@auth_token}"
+      }
+
       req_body = {
         title: 'Netflix Account',
         description: 'netflix user',
@@ -22,44 +34,56 @@ describe 'Testing Secret resource routes' do
         password: '1234'
       }.to_json
 
-      post_secret_url = "/api/v1/users/#{existing_user.id}/owned_secrets/"
+      post_secret_url = "/api/v1/users/#{@user.id}/owned_secrets/"
       post post_secret_url, req_body, req_header
       _(last_response.status).must_equal 201
       _(last_response.location).must_match(%r{http://})
     end
 
-    it 'SAD: should not create a secret with duplicate title' do
-      req_header = { 'CONTENT_TYPE' => 'application/json' }
-      req_body = {
-        title: 'Netflix Account',
-        description: 'netflix user',
-        account: 'vicky',
-        password: '1234'
-      }.to_json
-      post '/api/v1/users/vicky/owned_secrets', req_body, req_header
-      post '/api/v1/users/vicky/owned_secrets', req_body, req_header
-      _(last_response.status).must_equal 400
-      _(last_response.location).must_be_nil
-    end
+    # not need this
+    # it 'SAD: should not create a secret with duplicate title and account' do
+    #   req_header = {
+    #     'CONTENT_TYPE' => 'application/json',
+    #     'HTTP_AUTHORIZATION' => "Bearer #{@auth_token}"
+    #   }
+    #   req_body = {
+    #     title: 'Netflix Account',
+    #     description: 'netflix user',
+    #     account: 'vicky',
+    #     password: '1234'
+    #   }.to_json
+    #   post "/api/v1/users/#{@user.id}/owned_secrets", req_body, req_header
+    #   post "/api/v1/users/#{@user.id}/owned_secrets", req_body, req_header
+    #   _(last_response.status).must_equal 400
+    #   _(last_response.location).must_be_nil
+    # end
   end
 
   describe 'Finding existing owned secret' do
-    it 'HAPPY: should find an existing secrets' do
+    before do
       @new_user = CreateUser.call(
         username: 'vicky',
         email: 'vicky@keyper.com',
-        password: '1234')
+        password: '1234'
+      )
       @new_secret = (1..3).map do |i|
         CreateSecret.call(
           title: "random_secret#{i}.rb",
           description: "test string#{i}",
-          id: @new_user.id,
+          owner_id: @new_user.id,
           account: "vicky#{i}",
           password: '1234'
         )
       end
-
-      get "/api/v1/users/#{@new_user.id}/owned_secrets"
+      @user, @auth_token =
+        AuthenticateUser.call(username: 'vicky', password: '1234')
+    end
+    it 'HAPPY: should find an existing secrets' do
+      req_header = {
+        'CONTENT_TYPE' => 'application/json',
+        'HTTP_AUTHORIZATION' => "Bearer #{@auth_token}"
+      }
+      get "/api/v1/users/#{@new_user.id}/owned_secrets", nil, req_header
       _(last_response.status).must_equal 200
 
       results = JSON.parse(last_response.body)
@@ -68,8 +92,12 @@ describe 'Testing Secret resource routes' do
       end
     end
 
-    it 'SAD: should not find non-existent users' do
-      get "/api/v1/users/#{invalid_id(User)}/owned_secrets"
+    it 'SAD: should not find non-existent secret' do
+      req_header = {
+        'CONTENT_TYPE' => 'application/json',
+        'HTTP_AUTHORIZATION' => "Bearer #{@auth_token}"
+      }
+      get "/api/v1/users/#{@user.id}/owned_secrets/#{invalid_id(User)}", nil, req_header
       _(last_response.status).must_equal 404
     end
   end
