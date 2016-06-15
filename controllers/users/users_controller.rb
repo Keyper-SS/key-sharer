@@ -25,9 +25,6 @@ class ShareKeysAPI < Sinatra::Base
       halt 400
     end
 
-    new_location = URI.join(@request_url.to_s + '/', saved_user.username.to_s)
-                      .to_s
-
     status 201
     saved_user.to_json
   end
