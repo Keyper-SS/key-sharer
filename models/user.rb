@@ -4,7 +4,8 @@ require 'base64'
 require 'json'
 
 # Holds a User information
-class User < Sequel::Model
+class BaseUser < Sequel::Model
+  plugin :single_table_inheritance, :type
   plugin :timestamps, update_on_create: true
 
   one_to_many :owned_secrets,
@@ -23,6 +24,20 @@ class User < Sequel::Model
 
   plugin :association_dependencies, owned_secrets: :destroy
 
+  def to_json(options = {})
+    JSON({  type: type,
+            id: id,
+            attributes: {
+              username: username,
+              email: email
+            }
+          },
+         options)
+  end
+end
+
+# Regular User with full credentials
+class User < BaseUser
   def password=(new_password)
     new_salt = SecureDB.new_salt
     hashed = SecureDB.hash_password(new_salt, new_password)
@@ -34,15 +49,8 @@ class User < Sequel::Model
     try_hashed = SecureDB.hash_password(salt, try_password)
     try_hashed == password_hash
   end
+end
 
-  def to_json(options = {})
-    JSON({  type: 'user',
-            id: id,
-            attributes: {
-              username: username,
-              email: email
-            }
-          },
-         options)
-  end
+# SSO User without passwords
+class SsoUser < BaseUser
 end
