@@ -36,8 +36,9 @@ describe 'Testing Secret resource routes' do
 
       post_secret_url = "/api/v1/users/#{@user.id}/owned_secrets/"
       post post_secret_url, req_body, req_header
+
       _(last_response.status).must_equal 201
-      _(last_response.location).must_match(%r{http://})
+      _(JSON.parse(last_response.body)['id']).wont_be_nil
     end
 
     # not need this

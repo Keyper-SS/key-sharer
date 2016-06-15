@@ -17,7 +17,7 @@ describe 'Testing User resource routes' do
       }.to_json
       post '/api/v1/users/', req_body, req_header
       _(last_response.status).must_equal 201
-      _(last_response.location).must_match(%r{http://})
+      _(JSON.parse(last_response.body)['id']).wont_be_nil
     end
 
     it 'SAD: should not create users with duplicate names' do
