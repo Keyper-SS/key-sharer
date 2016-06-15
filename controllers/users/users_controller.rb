@@ -29,6 +29,6 @@ class ShareKeysAPI < Sinatra::Base
                       .to_s
 
     status 201
-    headers('Location' => new_location)
+    saved_user.to_json
   end
 end
