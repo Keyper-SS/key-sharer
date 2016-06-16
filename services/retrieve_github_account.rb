@@ -4,7 +4,7 @@ require 'http'
 class RetrieveSsoUser
   def self.call(code)
     verified_code = SecureClientMessage.verified_data(code)
-    access_token = get_access_token(verified_code)
+    access_token = get_access_token(verified_code['code'])
     github_account = get_github_account(access_token)
     sso_user = find_or_create_sso_user(github_account)
     [sso_user, SecureClientMessage.encrypt(sso_user)]
