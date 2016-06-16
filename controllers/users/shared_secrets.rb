@@ -11,8 +11,9 @@ class ShareKeysAPI < Sinatra::Base
         receiver = BaseUser[sharing.receiver_id]
         {
           'secret_id' => s.id,
-          'sharer_username' => receiver.username,
-          'sharer_email' => receiver.email,
+          'receiver_id' => receiver.id,
+          'receiver_username' => receiver.username,
+          'receiver_email' => receiver.email,
           'data' => {
             'title' => s.title,
             'description' => s.description,
@@ -41,8 +42,9 @@ class ShareKeysAPI < Sinatra::Base
       receiver = BaseUser[sharing.receiver_id]
       secret_info = {
         'secret_id' => secret.id,
-        'sharer_username' => receiver.username,
-        'sharer_email' => receiver.email,
+        'receiver_id' => receiver.id,
+        'receiver_username' => receiver.username,
+        'receiver_email' => receiver.email,
         'data' => {
           'title' => secret.title,
           'description' => secret.description,
