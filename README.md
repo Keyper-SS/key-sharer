@@ -364,7 +364,7 @@ curl http://localhost:9292/api/v1/users/1/received_secrets/6 \
 | METHOD | URL                                      | What to do      |
 | ------ | ---------------------------------------- | --------------- |
 | POST   | /api/v1/users/{sharer_id}/owned_secrets/{secret_id}/share | to share secret |
-
+| DELETE | /api/v1/users/{sharer_id}/owned_secrets/{secret_id}/share | to cancel sharing secret |
 
 #### Example
 **POST `/api/v1/users/{sharer_id}/owned_secrets/{secret_id}/share`**
@@ -379,7 +379,18 @@ $ curl http://localhost:9292/api/v1/users/1/owned_secrets/1/share \
   }'
 
 ```
+**POST `/api/v1/users/{sharer_id}/owned_secrets/{secret_id}/share`**
 
+```shell
+$ curl http://localhost:9292/api/v1/users/1/owned_secrets/1/share \
+  -X DELETE \
+  -H 'content-type: application/json' \
+  -H 'authorization: bearer {auth_token}' \
+  -d '{
+  "receiver_id": 2
+  }'
+
+```
 
 ## Install
 
