@@ -4,9 +4,11 @@ require 'http'
 class RetrieveSsoUser
   def self.call(code)
     access_token = get_access_token(code)
+    puts access_token
     github_account = get_github_account(access_token)
+    puts github_account
     sso_user = find_or_create_sso_user(github_account)
-
+    puts sso_user.to_json
     [sso_user, JWE.encrypt(sso_user)]
   end
 
