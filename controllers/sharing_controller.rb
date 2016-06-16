@@ -28,7 +28,7 @@ class ShareKeysAPI < Sinatra::Base
 
       halt 401 unless authorized_user?(env, sharer_id)
       delete_info = JSON.parse(request.body.read)
-      receiver_id = delete_info['']
+      receiver_id = delete_info['receiver_id']
       sharing = Sharing.where(sharer_id: sharer_id,
                               receiver_id: receiver_id,
                               secret_id: secret_id).first
