@@ -4,7 +4,7 @@ class CreateSecret
     secret = Secret.new(
       title: title,
       description: description)
-    user = User[owner_id]
+    user = BaseUser[owner_id]
     secret.account = account
     secret.password = password
     user.add_owned_secret(secret)

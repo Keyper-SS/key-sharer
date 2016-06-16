@@ -7,7 +7,7 @@ class ShareKeysAPI < Sinatra::Base
       halt 401 unless authorized_user?(env, sharer_id)
       share_info = JSON.parse(request.body.read)
       receiver_email = share_info['receiver_email']
-      receiver = User.where(email: receiver_email).first
+      receiver = BaseUser.where(email: receiver_email).first
 
       CreateSharing.call(
         sharer_id: sharer_id,

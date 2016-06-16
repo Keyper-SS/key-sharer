@@ -6,7 +6,7 @@ require 'sequel'
 class Secret < Sequel::Model
   plugin :timestamps, update_on_create: true
 
-  many_to_one :owner, class: :User
+  many_to_one :owner, class: :BaseUser
 
   set_allowed_columns :title, :description
 
