@@ -3,13 +3,11 @@ require 'http'
 # Find or create an SsoUser based on Github code
 class RetrieveSsoUser
   def self.call(code)
-    access_token = get_access_token(code)
-    puts access_token
+    verified_code = SecureClientMessage.verified_data(code)
+    access_token = get_access_token(verified_code['code'])
     github_account = get_github_account(access_token)
-    puts github_account
     sso_user = find_or_create_sso_user(github_account)
-    puts sso_user.to_json
-    [sso_user, JWE.encrypt(sso_user)]
+    [sso_user, SecureClientMessage.encrypt(sso_user)]
   end
 
   private_class_method
