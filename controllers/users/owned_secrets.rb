@@ -67,7 +67,7 @@ class ShareKeysAPI < Sinatra::Base
       halt 400
     end
 
-    status 201
+    status 202
     secret.to_json
   end
 end
