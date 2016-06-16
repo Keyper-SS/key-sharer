@@ -5,7 +5,7 @@ class ShareKeysAPI < Sinatra::Base
 
     id = params[:id]
     halt 401 unless authorized_user?(env, id)
-    user = User.where(id: id).first
+    user = BaseUser.where(id: id).first
     if user
       JSON.pretty_generate(data: user, relationships: user.owned_secrets)
     else

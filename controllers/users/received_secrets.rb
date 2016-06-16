@@ -9,8 +9,8 @@ class ShareKeysAPI < Sinatra::Base
       received_secrets_with_sharer = received_secrets.map do |s|
         {
           'secret_id' => s.id,
-          'sharer_username' => User[s.owner_id].username,
-          'sharer_email' => User[s.owner_id].email,
+          'sharer_username' => BaseUser[s.owner_id].username,
+          'sharer_email' => BaseUser[s.owner_id].email,
           'data' => {
             'title' => s.title,
             'description' => s.description,
@@ -36,8 +36,8 @@ class ShareKeysAPI < Sinatra::Base
       secret = Secret[params[:secret_id]]
       secret_info = {
         'secret_id' => secret.id,
-        'sharer_username' => User[secret.owner_id].username,
-        'sharer_email' => User[secret.owner_id].email,
+        'sharer_username' => BaseUser[secret.owner_id].username,
+        'sharer_email' => BaseUser[secret.owner_id].email,
         'data' => {
           'title' => secret.title,
           'description' => secret.description,

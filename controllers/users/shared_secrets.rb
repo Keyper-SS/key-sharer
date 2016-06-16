@@ -8,7 +8,7 @@ class ShareKeysAPI < Sinatra::Base
       shared_secrets = FindSharedSecrets.call(id: sharer_id)
       shared_secrets_with_receiver = shared_secrets.map do |s|
         sharing = Sharing.where(sharer_id: sharer_id, secret_id: s.id).first
-        receiver = User[sharing.receiver_id]
+        receiver = BaseUser[sharing.receiver_id]
         {
           'secret_id' => s.id,
           'sharer_username' => receiver.username,
@@ -38,7 +38,7 @@ class ShareKeysAPI < Sinatra::Base
       secret = Secret[secret_id]
 
       sharing = Sharing.where(sharer_id: sharer_id, secret_id: secret_id).first
-      receiver = User[sharing.receiver_id]
+      receiver = BaseUser[sharing.receiver_id]
       secret_info = {
         'secret_id' => secret.id,
         'sharer_username' => receiver.username,

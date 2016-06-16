@@ -6,7 +6,7 @@ class ShareKeysAPI < Sinatra::Base
       owner_id = params[:owner_id]
       halt 401 unless authorized_user?(env, owner_id)
 
-      owner = User[owner_id]
+      owner = BaseUser[owner_id]
       owned_secrets = owner.owned_secrets.map do |s|
         {
           'secret_id' => s.id,
