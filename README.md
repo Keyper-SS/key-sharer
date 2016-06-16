@@ -3,10 +3,10 @@ API to store key and share
 
 ## TOC
 - [Routes](#)
-	- [Authenticate Routes](#authenticate-routes)
-	- [User Routes](#user-routes)
-	- [Secret Routes](#secret-routes)
-	- [Sharing Routes](#sharing-routes)
+  - [Authenticate Routes](#authenticate-routes)
+  - [User Routes](#user-routes)
+  - [Secret Routes](#secret-routes)
+  - [Sharing Routes](#sharing-routes)
 - [Install](#install)
 - [Execute](#execute)
 
@@ -148,12 +148,12 @@ curl http://localhost:9292/api/v1/users \
 | GET    | /api/v1/users/{user_id}/received_secrets | received secrets of this user        |
 | GET    | /api/v1/users/{user_id}/received_secrets/{secret_id} | a certain received secret            |
 | POST   | /api/v1/users/{user_id}/owned_secrets    | create new secret for a certain user |
-
+| DELETE | /api/v1/users/{user_id}/owned_secrets/{secret_id} | delete a certain secret              |
 
 
 #### Example
 
-**GET `api/v1/users/{user_id}/owned_secrets`**
+**GET `/api/v1/users/{owner_id}/owned_secrets`**
 ```shell
 $ curl http://localhost:9292/api/v1/users/1/owned_secrets \
     -H 'content-type: application/json' \
@@ -194,7 +194,7 @@ $ curl http://localhost:9292/api/v1/users/1/owned_secrets \
 ```
 
 
-**GET `/api/v1/users/{user_id}/owned_secrets/{secret_id}`**
+**GET `/api/v1/users/{owner_id}/owned_secrets/{secret_id}`**
 ```shell
 $ curl http://localhost:9292/api/v1/users/1/owned_secrets/1 \
 	-H 'content-type: application/json' \
@@ -216,7 +216,7 @@ $ curl http://localhost:9292/api/v1/users/1/owned_secrets/1 \
 ```
 
 
-**GET `api/v1/users/{user_id}/shared_secrets`**
+**GET `/api/v1/sharers/{user_id}/shared_secrets`**
 ```shell
 $ curl http://localhost:9292/api/v1/users/1/shared_secrets \
 	-H 'content-type: application/json' \
@@ -253,7 +253,7 @@ $ curl http://localhost:9292/api/v1/users/1/shared_secrets \
 ```
 
 
-**GET `/api/v1/users/{user_id}/shared_secrets/{secret_id}`**
+**GET `/api/v1/users/{sharer_id}/shared_secrets/{secret_id}`**
 ```shell
 curl http://localhost:9292/api/v1/users/1/shared_secrets/2 \
          -H 'content-type: application/json' \
@@ -276,7 +276,7 @@ curl http://localhost:9292/api/v1/users/1/shared_secrets/2 \
 ```
 
 
-**GET `api/v1/users/[user_id]/received_secrets`**
+**GET `/api/v1/users/{receiver_id}/received_secrets`**
 ```shell
 curl http://localhost:9292/api/v1/users/1/received_secrets \
          -H 'content-type: application/json' \
@@ -312,7 +312,7 @@ curl http://localhost:9292/api/v1/users/1/received_secrets \
 ```
 
 
-**GET `/api/v1/users/{user_id}/received_secrets/{secret_id}`**
+**GET `/api/v1/users/{receiver_id}/received_secrets/{secret_id}`**
 ```shell
 curl http://localhost:9292/api/v1/users/1/received_secrets/6 \
          -H 'content-type: application/json' \
@@ -335,7 +335,7 @@ curl http://localhost:9292/api/v1/users/1/received_secrets/6 \
 ```
 
 
-**POST `api/v1/users/[user_id]/owned_secrets`**
+**POST `/api/v1/users/{owner_id}/owned_secrets`**
 ```shell
  $ curl http://localhost:9292/api/v1/users/1/owned_secrets \
  	-X POST \
@@ -349,6 +349,14 @@ curl http://localhost:9292/api/v1/users/1/received_secrets/6 \
 	}'
 ```
 
+**DELETE `/api/v1/users/{owner_id}/owned_secrets/{secret_id}`**
+```
+curl http://localhost:9292/api/v1/users/1/received_secrets/6 \
+		 -X DELETE \
+     -H 'content-type: application/json' \
+     -H 'authorization: bearer {auth_token}'
+
+```
 
 ### Sharing Routes
 #### Overview
