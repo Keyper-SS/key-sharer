@@ -20,4 +20,20 @@ class ShareKeysAPI < Sinatra::Base
     end
     status 201
   end
+
+  delete '/api/v1/users/:sharer_id/owned_secrets/:secret_id/share' do
+    begin
+      sharer_id = params[:sharer_id]
+      secret_id = params[:secret_id]
+
+      halt 401 unless authorized_user?(env, sharer_id)
+      DeleteSharingcall(
+        sharer_id: secret_id
+      )
+    rescue => e
+      logger.info "FAILED to share secret: #{e.inspect}"
+      halt 400
+    end
+    status 201
+  end
 end

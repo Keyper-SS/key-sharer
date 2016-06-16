@@ -15,11 +15,8 @@ class ShareKeysAPI < Sinatra::Base
 
   post '/api/v1/users/?' do
     begin
-      user_data = JSON.parse(request.body.read)
-      saved_user = CreateUser.call(
-        username: user_data['username'],
-        email: user_data['email'],
-        password: user_data['password'])
+      user_data = request.body.read
+      saved_user = CreateUser.call(user_data)
     rescue ClientNotAuthorized => e
       halt 401, e.to_s
     rescue => e
