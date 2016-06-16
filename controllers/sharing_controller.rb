@@ -32,7 +32,7 @@ class ShareKeysAPI < Sinatra::Base
       sharing = Sharing.where(sharer_id: sharer_id,
                               receiver_id: receiver_id,
                               secret_id: secret_id).first
-      DeleSteSharing.call(
+      DeleteSharing.call(
         sharing_id: sharing.id
       )
     rescue => e
