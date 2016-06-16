@@ -27,8 +27,13 @@ class ShareKeysAPI < Sinatra::Base
       secret_id = params[:secret_id]
 
       halt 401 unless authorized_user?(env, sharer_id)
-      DeleteSharingcall(
-        sharer_id: secret_id
+      delete_info = JSON.parse(request.body.read)
+      receiver_id = delete_info['']
+      sharing = Sharing.where(sharer_id: sharer_id,
+                              receiver_id: receiver_id,
+                              secret_id: secret_id).first
+      DeleteSharingcall.call(
+        sharer_id: sharing.id
       )
     rescue => e
       logger.info "FAILED to share secret: #{e.inspect}"
