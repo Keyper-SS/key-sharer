@@ -1,8 +1,14 @@
 require 'base64'
 require 'jose'
 
+class ClientNotAuthorized < StandardError
+  def initialize(msg='The client is not allowed to make this request')
+    super
+  end
+end
+
 # Encrypt and Decrypt JWT
-class JWE
+class SecureClientMessage
   def self.encrypt(object)
     JOSE::JWE.block_encrypt(
       jwk256, object.to_json,
@@ -13,6 +19,16 @@ class JWE
   def self.decrypt(jwe_compact)
     jwt, jwe = JOSE::JWE.block_decrypt(jwk256, jwe_compact)
     expired?(jwe) ? nil : jwt
+  end
+
+  def self.verified_data(signed_data)
+    app_public_key = JOSE::JWK.from_okp(
+      [:Ed25519, Base64.decode64(ENV['APP_PUBLIC_KEY'])])
+    verified, data_json, _ = app_public_key.verify(signed_data)
+    raise 'Client not authorized to send request' unless verified
+    JSON.parse(data_json)
+  rescue
+    raise ClientNotAuthorized
   end
 
   private_class_method

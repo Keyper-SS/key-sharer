@@ -70,4 +70,19 @@ class ShareKeysAPI < Sinatra::Base
     status 201
     secret.to_json
   end
+
+  delete '/api/v1/users/:owner_id/owned_secrets/:secret_id?' do
+    begin
+      owner_id = params[:owner_id]
+      halt 401 unless authorized_user?(env, owner_id)
+
+      secret_id = params[:secret_id]
+      DeleteSecret.call(secret_id: secret_id)
+    rescue => e
+      logger.info "FAILED to delete new secret: #{e.inspect}"
+      halt 400
+    end
+
+    status 201
+  end
 end
