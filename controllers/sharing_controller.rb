@@ -32,8 +32,8 @@ class ShareKeysAPI < Sinatra::Base
       sharing = Sharing.where(sharer_id: sharer_id,
                               receiver_id: receiver_id,
                               secret_id: secret_id).first
-      DeleteSharing.call(
-        sharer_id: sharing.id
+      DeleSteSharing.call(
+        sharing_id: sharing.id
       )
     rescue => e
       logger.info "FAILED to share secret: #{e.inspect}"
