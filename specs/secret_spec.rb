@@ -2,9 +2,9 @@ require_relative './spec_helper'
 
 describe 'Testing Secret resource routes' do
   before do
-    User.dataset.delete
+    Sharing.datasset.delete
     Secret.dataset.delete
-    Sharing.dataset.delete
+    User.dataset.delete
   end
 
   describe 'Creating new secret' do
