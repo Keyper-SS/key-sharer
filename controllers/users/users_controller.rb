@@ -20,6 +20,8 @@ class ShareKeysAPI < Sinatra::Base
         username: user_data['username'],
         email: user_data['email'],
         password: user_data['password'])
+    rescue ClientNotAuthorized => e
+      halt 401, e.to_s
     rescue => e
       logger.info "FAILED to create new user: #{e.inspect}"
       halt 400
